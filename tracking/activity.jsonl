@@ -1,0 +1,10 @@
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"task_started","ref":"REQ-001","branch":"feature/REQ-001-lean-sdlc-framework","note":"lean framework restructure"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"source_captured","ref":"SRC-001","note":"chat: lean setup with full tracking"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"decision_recorded","ref":"DEC-001","note":"lean agent roster"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"doc_created","ref":"docs/02-product/PRD-v1.0.md","to":"In Review"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"doc_created","ref":"docs/00-onboarding/architecture-map-v1.0.md","to":"In Review"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"req_created","ref":"REQ-001..REQ-007","note":"PRD-v1.0"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"question_raised","ref":"Q-001","note":"Assumed: commit sources with redaction"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"question_raised","ref":"Q-002","note":"Assumed: no separate QA role"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"tests_run","ref":"tests/setup.test.sh","branch":"feature/REQ-001-lean-sdlc-framework","note":"54 passed, 0 failed"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"status_changed","ref":"REQ-001..REQ-007","from":"In Progress","to":"In Review","branch":"feature/REQ-001-lean-sdlc-framework"}
