@@ -12,6 +12,7 @@ All notable changes to this project are recorded here, following [Keep a Changel
 - Gated lifecycle, ID scheme, traceability status board, questions and decisions logs, progress template and activity-ledger schema (REQ-005)
 - Ask-when-in-doubt protocol, including how subagents return their questions (REQ-006)
 - Test management: test plan, documented test cases with a positive and a failure case per acceptance criterion, RUN reports with a result per test case, and defect records from failure to verified fix (`manage-tests` skill) (REQ-008)
+- Installer does every setup step: stack menu or `--stack node-express|react|both|other`, blank `stack-project` template, `--remove-legacy` (or a prompt), `.gitkeep` scaffold for new projects, install record in `.claude/sdlc.json` and `framework_installed`/`framework_upgraded` ledger events, re-runs reuse the recorded type. It never runs git or changes GitHub (REQ-009, DEC-004)
 - Installer options `--type new|existing` and `--help`, deny rules in `.claude/settings.json`, and `tests/setup.test.sh` (REQ-007)
 
 ### Changed

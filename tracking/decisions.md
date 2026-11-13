@@ -40,3 +40,12 @@ Product, scope, priority and process decisions. Architecture decisions go in `do
 - **Decision:** (1) No separate QA agent; the reviewer independently verifies and records test runs. (2) Human UAT sign-off is optional, not a merge requirement. (3) No numeric code-coverage threshold; requirement coverage is the gate.
 - **Consequences:** No framework change; the current rules already match. The owner said "for now", so changing any of these needs a new decision that supersedes this one.
 - **Supersedes:** none
+
+## DEC-004 — The installer never touches git or GitHub
+- **Date:** 2026-11-13
+- **Decided by:** Project owner
+- **Related:** REQ-009, SRC-007
+- **Context:** REQ-009 automates the remaining setup steps; committing the files and protecting main were offered as automations.
+- **Decision:** `agent-setup.sh` runs no git commands (no init, branch or commit) and makes no GitHub changes. It prints reminders to commit the installed files on a branch and to protect `main`.
+- **Consequences:** You commit the installed files yourself. Branch protection stays a manual GitHub setting.
+- **Supersedes:** none

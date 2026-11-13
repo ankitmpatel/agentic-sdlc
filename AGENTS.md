@@ -108,7 +108,8 @@ Copy new progress files from `tracking/progress/_template.md`.
 echo "{\"ts\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"actor\":\"developer\",\"event\":\"status_changed\",\"ref\":\"REQ-003\",\"from\":\"Ready\",\"to\":\"In Progress\",\"branch\":\"feature/REQ-003-login\",\"note\":\"\"}" >> tracking/activity.jsonl
 ```
 
-Fields: `ts`, `actor` (planner, developer, reviewer, onboarding, human, main), `event`, `ref` (an ID or a file), optional `from`, `to`, `branch`, `note`.
+Fields: `ts`, `actor` (planner, developer, reviewer, onboarding, human, main, installer), `event`, `ref` (an ID or a file), optional `from`, `to`, `branch`, `note`.
+`agent-setup.sh` logs `framework_installed` or `framework_upgraded` itself and records the framework version, project type and stacks in `.claude/sdlc.json`. Don't edit that file by hand; re-run the installer instead.
 Events: `source_captured`, `req_created`, `status_changed`, `doc_created`, `doc_versioned`, `doc_approved`, `cr_raised`, `cr_decided`, `question_raised`, `question_answered`, `decision_recorded`, `task_started`, `task_blocked`, `task_done`, `tests_run`, `test_run_recorded`, `defect_raised`, `defect_closed`, `pr_opened`, `review_done`.
 
 ## 6. Ask, don't assume

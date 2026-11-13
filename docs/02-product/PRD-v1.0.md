@@ -2,7 +2,7 @@
 doc_id: PRD
 title: Product Requirements — agentic-sdlc framework v2
 version: 1.0
-status: Approved
+status: Superseded
 owner: Project owner
 created: 2026-11-12
 updated: 2026-11-13
@@ -22,6 +22,7 @@ sources: [SRC-001, SRC-002, SRC-003]
 | 1.0 | 2026-11-13 | main session (Claude) | Added AC-003.4 (raw sources committed verbatim) and AC-007.6 (deleted stack skills stay deleted) | SRC-002, Q-001, DEC-002, BUG-001 |
 | 1.0 | 2026-11-13 | main session (Claude) | Added REQ-008 (test management) and AC-007.7 | SRC-003 |
 | 1.0 | 2026-11-13 | Project owner | Approved | SRC-004 |
+| 1.0 | 2026-11-13 | main session (Claude) | Superseded by PRD-v1.1 | SRC-007 |
 
 ## 1. Overview
 A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated development process: requirement intake from any channel, versioned documents, traceability, and a question protocol. It ships through `agent-setup.sh`, which can be re-run safely. No BRD exists for this repo; the business goal is stated in SRC-001.

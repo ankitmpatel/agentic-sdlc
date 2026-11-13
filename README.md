@@ -9,17 +9,30 @@ A lean, fully tracked software development process for Claude Code. Three agents
 - [Claude Code](https://claude.com/claude-code)
 - Optional: the GitHub CLI, so agents can open PRs themselves: `brew install gh && gh auth login`. Without it, agents push the branch and give you a link to open the PR.
 
-**Install**
+**Install.** Everything is set up by one script, for new and existing projects: rules, agents, skills, tracking files, folders, the stack skill, and the `src/`/`tests/` scaffold for new projects.
 ```bash
 git clone https://github.com/ankitmpatel/agentic-sdlc.git
-cd /path/to/your-project                                    # the project to set up, ideally a git repository
-bash /path/to/agentic-sdlc/agent-setup.sh                   # asks: new or existing project
-bash /path/to/agentic-sdlc/agent-setup.sh --type new        # or non-interactive: --type new | --type existing
+cd /path/to/your-project
+bash /path/to/agentic-sdlc/agent-setup.sh            # interactive: asks project type and stack
+```
+
+Non-interactive (CI, scripts) and other options:
+```bash
+bash /path/to/agentic-sdlc/agent-setup.sh --type new --stack both
+bash /path/to/agentic-sdlc/agent-setup.sh --type existing --stack other --remove-legacy
 bash /path/to/agentic-sdlc/agent-setup.sh --help
 ```
 
-**Then**
-1. **Stack skill:** edit `.claude/skills/stack-*/SKILL.md` so it has your stack's real commands, and delete the example you don't use. In an existing project you can skip this, because the onboarding agent writes one from your codebase.
+| Option | Values | Without it |
+|---|---|---|
+| `--type` | `new` (adds the `src/` and `tests/` scaffold), `existing` (adds brownfield guardrails and the onboarding agent) | Uses the type recorded by an earlier run, or asks. With no terminal and no record, it exits with an error |
+| `--stack` | `node-express`, `react`, `both`, `other` (a blank `stack-project` template for any other stack) | Asks if the project has no stack skill yet; with no terminal it installs `stack-project` |
+| `--remove-legacy` | — | Asks before removing files from the previous framework version, or lists them when there's no terminal |
+
+The script **never runs git and never changes GitHub** (DEC-004). It records what it installed in `.claude/sdlc.json` (framework version, project type, stacks) and logs `framework_installed` / `framework_upgraded` in `tracking/activity.jsonl`.
+
+**Then** (the script prints these steps too)
+1. **Stack commands:** fill in the real commands in `.claude/skills/stack-*/SKILL.md`. In an existing project, the onboarding agent can do this from your codebase.
 2. **Protect `main`** on GitHub (Settings → Branches) so only you can merge.
 3. **Keep the repository private** if requirement sources will contain personal or confidential information. Raw emails and chats are committed verbatim.
 4. **Commit the installed files** on a branch, then run `claude` in the project and start:
@@ -27,10 +40,10 @@ bash /path/to/agentic-sdlc/agent-setup.sh --help
    - **Existing project:** "Use the onboarding agent to map this codebase." Approve the onboarding documents before starting new feature work.
 
 **Upgrading / re-running is safe**
-- Framework files (`AGENTS.md`, agents, core skills) are upgraded. A file you edited is saved as `<file>.bak-<timestamp>` first. Copy anything you need into `CLAUDE.md`, then delete the `.bak` files.
-- Project files (tracking logs, registers, test records, `CLAUDE.md`, settings) are only created when missing, so your data is never overwritten.
-- Example stack skills are installed only when the project has no `stack-*` skill yet. A stack skill you deleted or replaced doesn't come back.
-- Files from the previous framework version (`pm.md`, `architect.md`, flat `skills/*.md`, ...) are listed, not deleted, together with the `git rm` command that removes them.
+- Framework files (`AGENTS.md`, agents, core skills) are upgraded. A file you edited is saved as `<file>.bak-<timestamp>` first. Move anything you need into `CLAUDE.md`, then delete the `.bak` files.
+- Project files (tracking logs, registers, test records, `CLAUDE.md`, settings, stack skills) are only created when missing, so your data is never overwritten.
+- A stack skill is only added on re-run if you pass `--stack`. One you deleted or replaced doesn't come back.
+- Files from the previous framework version (`pm.md`, `architect.md`, flat `skills/*.md`, ...) are removed only with `--remove-legacy` or your "y" at the prompt. Nothing else is ever removed.
 
 ## Roles
 
@@ -114,6 +127,7 @@ AGENTS.md                      # rules for every agent (managed; brownfield guar
 CLAUDE.md                      # imports AGENTS.md, plus your project notes (yours)
 CHANGELOG.md
 .claude/
+  sdlc.json                    # install record: framework version, project type, stacks (written by the installer)
   settings.json                # denies gh pr merge, pushes to main/master, force-pushes (yours)
   agents/  planner.md  developer.md  reviewer.md  [onboarding.md]
   skills/
@@ -123,19 +137,18 @@ CHANGELOG.md
     manage-tests/              # SKILL.md + test-plan, test-cases, test-run and defect templates
     implement-feature/
     review-pr/
-    stack-node-express/        # example, edit to fit (yours)
-    stack-react/               # example, edit to fit (yours)
+    stack-node-express/ | stack-react/ | stack-project/   # the stack(s) you chose (yours)
 docs/
   index.md  [00-onboarding/]  01-business/  02-product/  03-architecture/adr/  04-delivery/{traceability.md,test-cases/,test-runs/,defects/,reviews/}
 requirements/
   register.md  inbox/  sources/attachments/  changes/
 tracking/
   activity.jsonl  questions.md  decisions.md  progress/_template.md
-[src/ tests/]                  # new projects only
+[src/{backend,frontend}/ tests/{backend,e2e}/]   # new projects only, with .gitkeep placeholders
 ```
 
 ### Adding your stack
-Copy `.claude/skills/stack-node-express/` to `.claude/skills/stack-<name>/`, update the `name:` field, and replace the commands and conventions with your project's real ones (Python/FastAPI, Next.js, PHP/Laravel, ...). In an existing project, the onboarding agent creates one from what it finds in the codebase.
+Choose `--stack other` (or option 4 in the menu) to get a blank `stack-project` skill, then fill in your project's real commands and conventions (Python/FastAPI, Next.js, PHP/Laravel, ...). In an existing project, the onboarding agent fills it in from what it finds in the codebase. To add another stack later, re-run with `--stack <value>`.
 
 ## Guardrails
 - Repository files are the source of truth; chat memory is not.
@@ -154,7 +167,10 @@ templates/
   CLAUDE.md
   framework/claude/       # → .claude/ (managed)
   brownfield/             # onboarding agent + docs/00-onboarding (existing projects)
+  greenfield/             # src/ and tests/ scaffold (new projects)
   project/                # → project root (created only if missing)
+  stacks/                 # stack-node-express, stack-react, stack-project (installed per --stack)
+  VERSION                 # framework version written to .claude/sdlc.json
 tests/setup.test.sh       # run: bash tests/setup.test.sh  (pip install pyyaml to also run TC-002.3)
 ```
 

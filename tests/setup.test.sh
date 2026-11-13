@@ -30,9 +30,22 @@ all_dirs() {
     for d in "$@"; do [ -d "$dir/$d" ] || return 1; done
 }
 
-install() { # install <dir> <type>
-    mkdir -p "$1"
-    (cd "$1" && bash "$SCRIPT" --type "$2") >"$1.log" 2>&1
+install() { # install <dir> <type> [extra options...] — always without a terminal
+    local dir="$1" type="$2"; shift 2
+    mkdir -p "$dir"
+    (cd "$dir" && bash "$SCRIPT" --type "$type" "$@" </dev/null) >"$dir.log" 2>&1
+}
+
+stacks_are() { # stacks_are <dir> <expected stack dirs...> — exactly these stack-* skills exist
+    local dir="$1"; shift
+    local actual expected
+    actual="$(cd "$dir/.claude/skills" && ls -d stack-* 2>/dev/null | sort | tr '\n' ' ')"
+    expected="$(printf '%s\n' "$@" | sort | tr '\n' ' ')"
+    [ "$actual" = "$expected" ]
+}
+
+json_field() { # json_field <file> <key>
+    python3 -c 'import json,sys; v=json.load(open(sys.argv[1]))[sys.argv[2]]; print(",".join(v) if isinstance(v,list) else v)' "$1" "$2"
 }
 
 frontmatter_name() {
@@ -89,8 +102,10 @@ valid_yaml() { python3 -c 'import yaml,sys; yaml.safe_load(open(sys.argv[1]))' "
 # ------------------------------------------------------------------
 echo "Scenario 1 — new project"
 N="$TMP/new"
-check "TC-007.1 --type new runs non-interactively and exits 0" install "$N" new
+check "TC-007.1 --type new runs non-interactively and exits 0" install "$N" new --stack both
 check "TC-007.1 new project gets src/ and tests/ scaffolding" all_dirs "$N" src/backend src/frontend tests/backend tests/e2e
+check "TC-009.10 new project scaffold has .gitkeep placeholders" all_files "$N" src/backend/.gitkeep src/frontend/.gitkeep tests/backend/.gitkeep tests/e2e/.gitkeep
+check "TC-009.16 output reminds to commit and protect main" sh -c "grep -q 'Commit the installed files' '$N.log' && grep -q \"Protect 'main'\" '$N.log'"
 check "TC-001.1 planner, developer and reviewer agents installed" all_files "$N" .claude/agents/planner.md .claude/agents/developer.md .claude/agents/reviewer.md
 check "TC-001.2 no onboarding agent in a new project" test ! -e "$N/.claude/agents/onboarding.md"
 check "TC-001.4 agent names match file names and have descriptions" valid_agents "$N"
@@ -162,10 +177,70 @@ check "TC-007.6 legacy files reported, not deleted" sh -c "grep -q 'previous fra
 
 # ------------------------------------------------------------------
 echo "Scenario 5 — invalid input"
-check "TC-007.7 unknown --type rejected with non-zero exit" sh -c "cd '$TMP' && ! bash '$SCRIPT' --type nonsense"
-check "TC-007.8 unknown option rejected with non-zero exit" sh -c "cd '$TMP' && ! bash '$SCRIPT' --bogus"
-check "TC-007.8 --type without a value rejected" sh -c "cd '$TMP' && ! bash '$SCRIPT' --type"
+check "TC-007.7 unknown --type rejected with non-zero exit" sh -c "cd '$TMP' && ! bash '$SCRIPT' --type nonsense </dev/null"
+check "TC-007.8 unknown option rejected with non-zero exit" sh -c "cd '$TMP' && ! bash '$SCRIPT' --bogus </dev/null"
+check "TC-007.8 --type without a value rejected" sh -c "cd '$TMP' && ! bash '$SCRIPT' --type </dev/null"
 check "TC-007.9 --help exits 0 and prints usage" sh -c "bash '$SCRIPT' --help | grep -q 'Usage:'"
+
+# ------------------------------------------------------------------
+echo "Scenario 6 — setup choices and install record (REQ-009)"
+S1="$TMP/stack-node"; install "$S1" new --stack node-express
+check "TC-009.1 --stack node-express installs only stack-node-express" stacks_are "$S1" stack-node-express
+S2="$TMP/stack-both"; install "$S2" new --stack both
+check "TC-009.2 --stack both installs stack-node-express and stack-react" stacks_are "$S2" stack-node-express stack-react
+S3="$TMP/stack-other"; install "$S3" new --stack other
+check "TC-009.3 --stack other installs only a valid stack-project template" sh -c "test \"\$(cd '$S3/.claude/skills' && ls -d stack-*)\" = stack-project && grep -q '^name: stack-project$' '$S3/.claude/skills/stack-project/SKILL.md'"
+check "TC-009.3 stack-project passes skill validation" valid_skills "$S3"
+S4="$TMP/stack-default"; install "$S4" new
+check "TC-009.4 no terminal and no --stack installs only stack-project" stacks_are "$S4" stack-project
+
+S6="$TMP/stack-invalid"; mkdir -p "$S6"
+check "TC-009.6 invalid --stack rejected and nothing installed" sh -c "cd '$S6' && ! bash '$SCRIPT' --type new --stack cobol </dev/null >out.txt 2>&1 && grep -q 'node-express' out.txt && test ! -e AGENTS.md"
+
+S7="$TMP/stack-react"; install "$S7" new --stack react
+check "TC-009.12 sdlc.json records version, type and stacks; ledger has framework_installed" sh -c "
+    test -n \"\$(json_v=\$(python3 -c 'import json;print(json.load(open(\"$S7/.claude/sdlc.json\"))[\"framework_version\"])'); echo \$json_v)\" &&
+    test \"\$(python3 -c 'import json;print(json.load(open(\"$S7/.claude/sdlc.json\"))[\"project_type\"])')\" = new &&
+    test \"\$(python3 -c 'import json;print(\",\".join(json.load(open(\"$S7/.claude/sdlc.json\"))[\"stacks\"]))')\" = stack-react &&
+    python3 -c 'import json;assert json.load(open(\"$S7/.claude/sdlc.json\"))[\"installed_at\"]' &&
+    grep -q '\"event\":\"framework_installed\"' '$S7/tracking/activity.jsonl'"
+install "$S7" new
+check "TC-009.7 re-run with an existing stack skill adds no stack skill" stacks_are "$S7" stack-react
+
+L2="$TMP/legacy-remove"
+mkdir -p "$L2/.claude/agents" "$L2/.claude/skills/my-skill"
+echo "old" > "$L2/.claude/agents/pm.md"
+echo "old" > "$L2/.claude/skills/create-prd.md"
+echo "mine" > "$L2/.claude/agents/my-agent.md"
+printf -- '---\nname: my-skill\ndescription: A custom skill the user wrote, which the installer must never remove.\n---\n' > "$L2/.claude/skills/my-skill/SKILL.md"
+install "$L2" new --stack other --remove-legacy
+check "TC-009.8 --remove-legacy removes previous-version files" sh -c "test ! -e '$L2/.claude/agents/pm.md' && test ! -e '$L2/.claude/skills/create-prd.md' && grep -qi 'removed' '$L2.log'"
+check "TC-009.9 --remove-legacy keeps files that are not legacy" all_files "$L2" .claude/agents/my-agent.md .claude/skills/my-skill/SKILL.md
+
+E_AT="$(json_field "$E/.claude/sdlc.json" installed_at 2>/dev/null)"
+check "TC-009.14 re-run without --type uses the recorded type and logs framework_upgraded" sh -c "
+    cd '$E' && bash '$SCRIPT' </dev/null >/dev/null 2>&1 &&
+    test -f .claude/agents/onboarding.md &&
+    grep -q '\"event\":\"framework_upgraded\"' tracking/activity.jsonl &&
+    test -n '$E_AT' &&
+    test \"\$(python3 -c 'import json;print(json.load(open(\".claude/sdlc.json\"))[\"installed_at\"])')\" = '$E_AT'"
+
+S15="$TMP/no-type"; mkdir -p "$S15"
+check "TC-009.15 no terminal, no --type and no record exits non-zero" sh -c "cd '$S15' && ! bash '$SCRIPT' </dev/null >out.txt 2>&1 && grep -q -- '--type' out.txt && test ! -e AGENTS.md"
+
+G="$TMP/git-repo"; mkdir -p "$G"
+(cd "$G" && git init -q && git checkout -q -b main && echo app > app.txt && git add app.txt \
+    && git -c user.name=t -c user.email=t@example.invalid commit -q -m init) >/dev/null 2>&1
+G_HEAD="$(cd "$G" && git rev-parse HEAD 2>/dev/null)"
+install "$G" existing --stack other
+check "TC-009.13 installer leaves git untouched (HEAD, branch, index)" sh -c "
+    cd '$G' && test -n '$G_HEAD' &&
+    test \"\$(git rev-parse HEAD)\" = '$G_HEAD' &&
+    test \"\$(git rev-parse --abbrev-ref HEAD)\" = main &&
+    git diff --cached --quiet &&
+    test \"\$(git rev-list --count HEAD)\" = 1 &&
+    git status --porcelain | grep -q '^?? AGENTS.md' &&
+    ! grep -nE '^[[:space:]]*(git|gh)[[:space:]]|\\\$\\((git|gh)[[:space:]]' '$SCRIPT'"
 
 echo
 echo "Passed: $PASS  Failed: $FAIL  Skipped: $SKIP"

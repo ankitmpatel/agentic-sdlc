@@ -33,3 +33,15 @@
 {"ts":"2026-11-13T03:16:55Z","actor":"main","event":"question_answered","ref":"Q-003","from":"Assumed","to":"Answered","note":"UAT optional"}
 {"ts":"2026-11-13T03:16:55Z","actor":"main","event":"question_answered","ref":"Q-004","from":"Assumed","to":"Answered","note":"no coverage percentage"}
 {"ts":"2026-11-13T03:16:55Z","actor":"main","event":"decision_recorded","ref":"DEC-003","note":"testing and roles defaults, for now"}
+{"ts":"2026-11-13T03:30:04Z","actor":"installer","event":"framework_installed","ref":".claude/sdlc.json","note":"agentic-sdlc 2.1.0, type existing, stacks stack-bash, created 0, updated 1"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"source_captured","ref":"SRC-006","note":"chat: all setup through the .sh installer"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"source_captured","ref":"SRC-007","note":"chat: REQ-009 approval and decisions"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"decision_recorded","ref":"DEC-004","note":"installer never touches git or GitHub"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"doc_versioned","ref":"docs/02-product/PRD-v1.1.md","from":"PRD-v1.0","to":"PRD-v1.1","note":"REQ-009 added"}
+{"ts":"2026-11-13T03:30:48Z","actor":"human","event":"doc_approved","ref":"docs/02-product/PRD-v1.1.md","to":"Approved","note":"approve and build now; recorded by main via SRC-007"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"doc_versioned","ref":"docs/04-delivery/test-plan-v1.1.md","from":"test-plan-v1.0","to":"test-plan-v1.1"}
+{"ts":"2026-11-13T03:30:48Z","actor":"human","event":"doc_approved","ref":"docs/04-delivery/test-plan-v1.1.md","to":"Approved","note":"with TC-REQ-009; recorded by main via SRC-007"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"req_created","ref":"REQ-009","to":"Approved","note":"PRD-v1.1"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"tests_run","ref":"tests/setup.test.sh","branch":"feature/REQ-001-lean-sdlc-framework","note":"red before code: 21 pass, 40 fail"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"tests_run","ref":"tests/setup.test.sh","branch":"feature/REQ-001-lean-sdlc-framework","note":"green: 61 pass, 0 fail, 1 skipped"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"status_changed","ref":"REQ-009","from":"Approved","to":"In Review","branch":"feature/REQ-001-lean-sdlc-framework"}

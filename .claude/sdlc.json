@@ -1,0 +1,8 @@
+{
+  "framework": "agentic-sdlc",
+  "framework_version": "2.1.0",
+  "project_type": "existing",
+  "stacks": ["stack-bash"],
+  "installed_at": "2026-11-13T03:30:04Z",
+  "updated_at": "2026-11-13T03:30:04Z"
+}
