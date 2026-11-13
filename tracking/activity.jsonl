@@ -28,3 +28,8 @@
 {"ts":"2026-11-13T02:58:50Z","actor":"human","event":"doc_approved","ref":"docs/02-product/PRD-v1.0.md","from":"In Review","to":"Approved","note":"Gate A; recorded by main via SRC-004"}
 {"ts":"2026-11-13T02:58:50Z","actor":"human","event":"doc_approved","ref":"docs/00-onboarding/architecture-map-v1.0.md","from":"In Review","to":"Approved","note":"Gate B; recorded by main via SRC-004"}
 {"ts":"2026-11-13T02:58:50Z","actor":"human","event":"doc_approved","ref":"docs/04-delivery/test-plan-v1.0.md","from":"In Review","to":"Approved","note":"Gate B incl. TC-REQ-001..008; recorded by main via SRC-004"}
+{"ts":"2026-11-13T03:16:55Z","actor":"main","event":"source_captured","ref":"SRC-005","note":"chat: defaults for Q-002..Q-004"}
+{"ts":"2026-11-13T03:16:55Z","actor":"main","event":"question_answered","ref":"Q-002","from":"Assumed","to":"Answered","note":"no separate QA agent"}
+{"ts":"2026-11-13T03:16:55Z","actor":"main","event":"question_answered","ref":"Q-003","from":"Assumed","to":"Answered","note":"UAT optional"}
+{"ts":"2026-11-13T03:16:55Z","actor":"main","event":"question_answered","ref":"Q-004","from":"Assumed","to":"Answered","note":"no coverage percentage"}
+{"ts":"2026-11-13T03:16:55Z","actor":"main","event":"decision_recorded","ref":"DEC-003","note":"testing and roles defaults, for now"}

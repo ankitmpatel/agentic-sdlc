@@ -1,34 +1,48 @@
 # agentic-sdlc
 
-A lean, fully tracked software development process for Claude Code. Three agents and five skills take a feature from a raw email or chat message to a reviewed PR, with document versioning, traceability, and agents that ask instead of guessing.
+A lean, fully tracked software development process for Claude Code. Three agents and six skills take a feature from a raw email or chat message to a reviewed PR, with document versioning, documented test cases and test runs, traceability, and agents that ask instead of guessing.
 
 ## Setup
 
-Prerequisites: Bash, Git, [Claude Code](https://claude.com/claude-code), and optionally the GitHub CLI (`gh`) for opening PRs.
+**Prerequisites**
+- Bash 3.2 or later (the macOS default works) and Git
+- [Claude Code](https://claude.com/claude-code)
+- Optional: the GitHub CLI, so agents can open PRs themselves: `brew install gh && gh auth login`. Without it, agents push the branch and give you a link to open the PR.
 
+**Install**
 ```bash
 git clone https://github.com/ankitmpatel/agentic-sdlc.git
-cd /path/to/your-project
+cd /path/to/your-project                                    # the project to set up, ideally a git repository
 bash /path/to/agentic-sdlc/agent-setup.sh                   # asks: new or existing project
-bash /path/to/agentic-sdlc/agent-setup.sh --type existing   # non-interactive
+bash /path/to/agentic-sdlc/agent-setup.sh --type new        # or non-interactive: --type new | --type existing
+bash /path/to/agentic-sdlc/agent-setup.sh --help
 ```
 
-Then:
-1. Edit `.claude/skills/stack-*/SKILL.md` to match your stack's real commands, and delete the one you don't use.
-2. Protect `main` on GitHub (Settings → Branches) so only you can merge.
-3. Run `claude` in the project.
+**Then**
+1. **Stack skill:** edit `.claude/skills/stack-*/SKILL.md` so it has your stack's real commands, and delete the example you don't use. In an existing project you can skip this, because the onboarding agent writes one from your codebase.
+2. **Protect `main`** on GitHub (Settings → Branches) so only you can merge.
+3. **Keep the repository private** if requirement sources will contain personal or confidential information. Raw emails and chats are committed verbatim.
+4. **Commit the installed files** on a branch, then run `claude` in the project and start:
+   - **New project:** "Use the planner to capture this as a requirement source: *(paste an email, chat or notes)*"
+   - **Existing project:** "Use the onboarding agent to map this codebase." Approve the onboarding documents before starting new feature work.
 
-**Re-running is safe.** Framework files (`AGENTS.md`, agents, core skills) are upgraded, and any local edits are saved as `<file>.bak-<timestamp>`. Project files (tracking logs, registers, stack skills, `CLAUDE.md`, settings) are only created when missing, so your data and customizations are never overwritten. The installer also lists files from the previous framework version for you to remove.
+**Upgrading / re-running is safe**
+- Framework files (`AGENTS.md`, agents, core skills) are upgraded. A file you edited is saved as `<file>.bak-<timestamp>` first. Copy anything you need into `CLAUDE.md`, then delete the `.bak` files.
+- Project files (tracking logs, registers, test records, `CLAUDE.md`, settings) are only created when missing, so your data is never overwritten.
+- Example stack skills are installed only when the project has no `stack-*` skill yet. A stack skill you deleted or replaced doesn't come back.
+- Files from the previous framework version (`pm.md`, `architect.md`, flat `skills/*.md`, ...) are listed, not deleted, together with the `git rm` command that removes them.
 
 ## Roles
 
 | Agent | Does | Never |
 |---|---|---|
-| **planner** | Captures requirement sources, writes BRD/PRD, technical design, API contract, change requests | Writes code |
-| **developer** | Implements approved REQs test-first, updates traceability and CHANGELOG, opens PRs | Changes requirements or contracts |
-| **reviewer** | Verifies a PR independently and runs the tests itself, then writes a review report | Edits code, approves, or merges |
-| **onboarding** *(existing projects)* | Maps the existing codebase into as-built docs and REQs | Changes code |
+| **planner** | Captures requirement sources, writes BRD/PRD, technical design, API contract, test plan and test cases, change requests | Writes code |
+| **developer** | Automates every test case and implements approved REQs test-first, fixes defects, updates traceability and CHANGELOG, opens PRs | Changes requirements, contracts or test cases' expected results |
+| **reviewer** | Verifies a PR independently: runs every test, records the RUN report, raises and verifies defects, writes the review report | Edits code, approves, or merges |
+| **onboarding** *(existing projects)* | Maps the existing codebase into as-built docs, REQs, test cases and a baseline test run | Changes code |
 | **you** | Approve documents, answer questions, accept CRs, merge, release | — |
+
+There is no separate QA agent: test cases are designed by the planner, automated by the developer and verified independently by the reviewer. Your own acceptance sign-off (UAT) is optional, and there is no code-coverage percentage; the gate is a passing positive and failure case for every acceptance criterion. These defaults are recorded in this repo as DEC-003, and a project can change them in its own test plan.
 
 ## Lifecycle
 
@@ -39,7 +53,7 @@ Then:
 
 - **Gate A:** you approve the PRD. **Gate B:** you approve the design, contract, test plan and test cases. **Gate C:** you merge the PR.
 - Agents refuse to start a phase whose gate hasn't passed.
-- Bugs (`BUG-###`) skip straight to a failing test and a fix. Changes to approved work go through a change request (`CR-###`) and a new document version.
+- Bugs (`BUG-###`) get a defect record in `docs/04-delivery/defects/`, then go straight to a failing test, a fix and a verification run. Changes to approved work go through a change request (`CR-###`) and a new document version.
 
 ## Day-to-day prompts
 
@@ -49,7 +63,7 @@ Then:
 | Process dropped files | Put them in `requirements/inbox/`, then: "Use the planner to process the inbox." |
 | Turn sources into requirements | "Use the planner to update the PRD from the new sources." |
 | Approve a document | "PRD-v1.0 is approved. Record it." (Only you can approve. Agents never assume approval.) |
-| Answer questions | "Answers: Q-003 option 1, Q-004 use 30 days." |
+| Answer questions | "Answers: Q-003 option 1, Q-004 use 30 days." or "Go with the defaults for the open questions." |
 | Design | "Use the planner to write the technical design for PRD-v1.0." |
 | Build | "Use the developer to implement REQ-004." |
 | Review | "Use the reviewer to review PR 12." (records the test run and any defects) |
@@ -128,7 +142,7 @@ Copy `.claude/skills/stack-node-express/` to `.claude/skills/stack-<name>/`, upd
 - No merging and no pushing to `main` by agents. `.claude/settings.json` blocks the common commands, but deny rules match command prefixes only, so **GitHub branch protection is the real safeguard**.
 - Raw emails, chats and documents are committed verbatim as the audit trail; only credentials and payment card numbers are redacted. Keep the repository private if sources contain personal data.
 - IDs appear in every branch, commit and PR: `feat(REQ-012): ...`.
-- Every acceptance criterion is covered by a test that names the REQ. No skipped or weakened tests.
+- Every acceptance criterion has a positive and a failure test case, each automated with its TC-ID in the test name. Every PR gets a recorded test run. No skipped, deleted or weakened tests.
 - Existing projects: onboard first, make surgical changes, and add characterization tests before touching existing files.
 
 ## Developing this repository
@@ -141,8 +155,10 @@ templates/
   framework/claude/       # → .claude/ (managed)
   brownfield/             # onboarding agent + docs/00-onboarding (existing projects)
   project/                # → project root (created only if missing)
-tests/setup.test.sh       # run: bash tests/setup.test.sh
+tests/setup.test.sh       # run: bash tests/setup.test.sh  (pip install pyyaml to also run TC-002.3)
 ```
+
+Each check in `tests/setup.test.sh` is named after a test case in `docs/04-delivery/test-cases/`. The commands and conventions for working on this repository are in `.claude/skills/stack-bash/SKILL.md`.
 
 Template folders are named `claude/`, not `.claude/`, so Claude Code doesn't load them as this repository's own configuration. The repository uses the framework on itself: its `.claude/`, `docs/`, `requirements/` and `tracking/` folders are an installed copy and track its own development.
 

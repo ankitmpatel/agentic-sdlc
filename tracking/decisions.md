@@ -31,3 +31,12 @@ Product, scope, priority and process decisions. Architecture decisions go in `do
 - **Decision:** Commit raw emails, chats and documents, and their original files, verbatim, with headers, names, signatures and quoted replies kept. Credentials and payment card numbers are still redacted as `[REDACTED: <type>]`.
 - **Consequences:** The repository holds personal data and should stay private. The intake skill, AGENTS.md §8 and the inbox README were updated; tests assert the rule.
 - **Supersedes:** none
+
+## DEC-003 — Testing and roles: defaults accepted for now
+- **Date:** 2026-11-13
+- **Decided by:** Project owner
+- **Related:** Q-002, Q-003, Q-004, SRC-005, REQ-001, REQ-008
+- **Context:** Three non-blocking questions were running on assumed defaults.
+- **Decision:** (1) No separate QA agent; the reviewer independently verifies and records test runs. (2) Human UAT sign-off is optional, not a merge requirement. (3) No numeric code-coverage threshold; requirement coverage is the gate.
+- **Consequences:** No framework change; the current rules already match. The owner said "for now", so changing any of these needs a new decision that supersedes this one.
+- **Supersedes:** none

@@ -18,7 +18,7 @@
 - [x] REQ-008: manage-tests skill, rules, agents, test cases for REQ-001…008, test names carry TC-IDs
 - [x] Record RUN for this branch (RUN-20261113-0251-REQ-001-branch)
 - [x] Owner approves PRD-v1.0, ARCH-MAP v1.0 and TEST-PLAN v1.0 (SRC-004)
-- [ ] Owner answers Q-002, Q-003, Q-004
+- [x] Owner answers Q-002, Q-003, Q-004 (SRC-005: defaults, DEC-003)
 - [ ] Push branch, open PR, reviewer run, owner merges
 
 ## Log
@@ -31,6 +31,7 @@
 | 2026-11-13 | SRC-003 / REQ-008: test management added. Test names now carry TC-IDs; checks went from 60 to 46 because related checks were merged, with TC-002.5 and TC-007.13 added. |
 | 2026-11-13 | RUN-20261113-0251-REQ-001-branch on e82e8e5: 38/39 test cases pass, 1 skipped (TC-002.3, PyYAML missing), exit criteria Met. BUG-001 Verified. |
 | 2026-11-13 | Owner approved PRD-v1.0, ARCH-MAP v1.0 and TEST-PLAN v1.0 (SRC-004). Gates A and B passed after the fact. |
+| 2026-11-13 | Q-002–Q-004 answered with the defaults (SRC-005, DEC-003). The approved PRD and test plan were not edited (frozen); questions.md is the record. README setup instructions updated. |
 
 ## Test evidence
 | Date | Command | Result |
@@ -41,4 +42,4 @@
 
 ## Blockers and questions
 - Q-001 answered (SRC-002)
-- Q-002, Q-003, Q-004 (non-blocking, Assumed)
+- Q-002, Q-003, Q-004 answered (SRC-005)
