@@ -25,13 +25,17 @@ Record each item as ✅, ❌ (finding) or N/A.
 - The diff changes only what the REQ needs: no unrelated refactors, and no changes to approved docs or contracts
 - Existing projects: the `AGENTS.md` §10 guardrails are followed (new files, characterization tests)
 
-**C. Requirements coverage**
-- Every acceptance criterion of every REQ in the PR has a test that actually asserts the stated behavior
+**C. Requirements and test-case coverage**
+- Every acceptance criterion has at least one Positive and one failure test case (or a reasoned `N/A`) in `docs/04-delivery/test-cases/`
+- Every `Auto` test case has an automated test that actually asserts its expected result. Read the test, don't trust its name.
+- No test case was deleted, renumbered or weakened (check the diff of the test-case files)
 - Implemented paths, fields, status codes and errors match the approved contract exactly
 - Edge and error cases in the acceptance criteria are tested, not just the happy path
 
-**D. Tests (run them yourself)**
-- Run the stack skill's commands for unit, integration, E2E, lint and type-check. Record each exact command and its result.
+**D. Test run (run it yourself)**
+- Run the stack skill's commands for unit, integration, E2E, lint and type-check, and execute the `Manual` test cases.
+- Record the run as `docs/04-delivery/test-runs/RUN-…md`, with a result per test case (`manage-tests` §3).
+- Classify every failure. Raise a `BUG` record for each product defect (`manage-tests` §4). Check the test plan's exit criteria.
 - No skipped, weakened or deleted tests (search the diff for `skip`, `only`, `xit` and removed assertions)
 
 **E. Code quality and security**
@@ -58,9 +62,8 @@ Write `docs/04-delivery/reviews/REV-<PR number or branch>-<YYYY-MM-DD>.md`:
 - Items: REQ-…, governing docs: PRD-vX.Y, api-contract-vX.Y
 - **Verdict: Changes requested | Ready for human**
 
-## Test runs
-| Command | Result |
-|---|---|
+## Test run
+RUN-… — <n> pass · <n> fail · <n> skipped · exit criteria Met / Not met · defects: BUG-… or none
 
 ## Findings
 | # | Severity | File:line | Finding | Suggested fix |
@@ -70,9 +73,9 @@ Write `docs/04-delivery/reviews/REV-<PR number or branch>-<YYYY-MM-DD>.md`:
 A ✅ · B ✅ · C ❌ (#1) · D ✅ · E ✅ · F N/A · G ✅
 ```
 
-The verdict is **Changes requested** if there is any Blocker or Major finding, or any acceptance criterion without a real test. Otherwise it is **Ready for human**.
+The verdict is **Changes requested** if there is any Blocker or Major finding, any open BUG from this run, the exit criteria are not met, or any acceptance criterion lacks a real positive or failure test. Otherwise it is **Ready for human**.
 
 ## 4. Publish
 - With `gh`: `gh pr review <n> --request-changes --body-file <report>` for Changes requested, or `gh pr review <n> --comment --body-file <report>` for Ready for human. **Never `--approve`. Never merge.**
-- Without `gh`: commit the report to the PR branch (`docs(REQ-…): review report`) and push.
+- Always commit the review report, the RUN report and any defect files to the PR branch (`test(REQ-…): RUN-… and review report`) and push, so the evidence lives in the repository.
 - Log `review_done` with the verdict in `note`.

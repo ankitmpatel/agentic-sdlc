@@ -11,6 +11,7 @@ All notable changes to this project are recorded here, following [Keep a Changel
 - Document versioning rules, a standard header and the `docs/index.md` document register (REQ-004)
 - Gated lifecycle, ID scheme, traceability status board, questions and decisions logs, progress template and activity-ledger schema (REQ-005)
 - Ask-when-in-doubt protocol, including how subagents return their questions (REQ-006)
+- Test management: test plan, documented test cases with a positive and a failure case per acceptance criterion, RUN reports with a result per test case, and defect records from failure to verified fix (`manage-tests` skill) (REQ-008)
 - Installer options `--type new|existing` and `--help`, deny rules in `.claude/settings.json`, and `tests/setup.test.sh` (REQ-007)
 
 ### Changed

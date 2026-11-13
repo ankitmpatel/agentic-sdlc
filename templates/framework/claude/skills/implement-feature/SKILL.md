@@ -9,6 +9,7 @@ Use the project's `stack-*` skill for the actual commands and conventions.
 ## 1. Gate check (stop if any fails)
 - [ ] The traceability row shows `Ready` (or `Approved` when the design says no technical design is needed). For a BUG, the row exists.
 - [ ] The REQ's PRD version is `Approved`. For API work, the contract version is `Approved` and lists the REQ in `x-req-ids`.
+- [ ] Test cases exist in `docs/04-delivery/test-cases/TC-REQ-###.md`, with positive and failure cases for every AC. A BUG has its defect file in `docs/04-delivery/defects/`.
 - [ ] No open blocking question references the item.
 
 If a check fails, report the missing gate and ask. Do not start.
@@ -19,10 +20,11 @@ If a check fails, report the missing gate and ask. Do not start.
 3. Set the traceability status to `In Progress`. Log `task_started` and `status_changed`.
 
 ## 3. Tests first
-1. For each acceptance criterion, write a test **before** the code. Include the REQ and AC in the test name: `REQ-004 AC-004.2 rejects expired reset token`.
+1. Open the REQ's test-case file. For **every** `Auto` test case, positive and failure cases alike, write the test **before** the code, with the IDs in its name: `REQ-004 TC-004.3 rejects expired reset token`. Fill in the case's Automated test column (`manage-tests` §2).
 2. Put each test at the level the technical design's testing strategy names: unit, integration, or E2E. E2E tests select elements by `data-testid` and live in a file named after the REQ.
-3. **Bugs:** first write a test that reproduces the bug, run it, and confirm it fails.
-4. Run the new tests and confirm they fail for the expected reason. Record this in the progress file.
+3. Found an uncovered case (an edge case or error path)? Add it as a new TC at the bottom of the file and automate it. Never delete, renumber or weaken an existing case.
+4. **Bugs:** first write the test for the defect's TC (add a TC if none covers it), run it, and confirm it fails the way the defect file describes. Fill in the defect's Root cause and Fix sections when you're done.
+5. Run the new tests and confirm they fail for the expected reason. Record this in the progress file.
 
 ## 4. Implement
 - Write the minimum code that satisfies the acceptance criteria and the contract **exactly**: paths, field names, types, status codes and error schema.
@@ -53,10 +55,13 @@ REQ-004 (PRD-v1.1), contract api-contract-v1.1.yaml
 ## Summary
 <what changed and why>
 
-## Acceptance criteria → tests
-| AC | Test |
-|---|---|
-| AC-004.1 | tests/backend/reset.test.ts › "REQ-004 AC-004.1 ..." |
+## Test cases → tests
+| TC | AC | Type | Test |
+|---|---|---|---|
+| TC-004.1 | AC-004.1 | Positive | tests/backend/reset.test.ts › "REQ-004 TC-004.1 ..." |
+| TC-004.2 | AC-004.1 | Negative | tests/backend/reset.test.ts › "REQ-004 TC-004.2 ..." |
+
+Test cases added during development: <TC-IDs or none>
 
 ## Test evidence
 | Command | Result |

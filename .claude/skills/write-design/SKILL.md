@@ -35,8 +35,9 @@ The same rules apply as for the PRD: create v1.0, edit drafts in place, and copy
 - [ ] The contract is valid YAML (`python3 -c "import yaml,sys; yaml.safe_load(open(sys.argv[1]))" <file>` or the project's OpenAPI linter)
 - [ ] Each significant decision has an ADR with the alternatives considered
 - [ ] The testing strategy maps every acceptance criterion to a test level
+- [ ] The test plan and the test-case files exist (`manage-tests` §1), with a positive and a failure case for every acceptance criterion
 - [ ] The traceability Design column links the design and contract versions, and the REQs are `In Design`
 - [ ] `docs/index.md` is updated, and `doc_created` or `doc_versioned` is logged
 
 ## 5. Recording approval (Gate B)
-Only when the human explicitly approves: set the design and contract to `Approved` (and the accepted ADRs to `Accepted`), set the covered REQs to `Ready` in traceability, update `docs/index.md`, and log `doc_approved` and `status_changed`.
+Only when the human explicitly approves: set the design, contract and test plan to `Approved` (and the accepted ADRs to `Accepted`), set the covered REQs to `Ready` in traceability, update `docs/index.md`, and log `doc_approved` and `status_changed`.

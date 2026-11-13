@@ -6,24 +6,26 @@ These rules apply to every agent and to the main Claude session. **Repository fi
 
 | Role | Definition | Owns |
 |---|---|---|
-| Planner | `.claude/agents/planner.md` | Requirement intake, BRD, PRD, technical design, API contract, change requests |
-| Developer | `.claude/agents/developer.md` | Code, unit/integration/E2E tests, traceability updates, CHANGELOG entries |
-| Reviewer | `.claude/agents/reviewer.md` | Independent verification and PR review. Never edits code or specs |
+| Planner | `.claude/agents/planner.md` | Requirement intake, BRD, PRD, technical design, API contract, test plan and test cases, change requests |
+| Developer | `.claude/agents/developer.md` | Code, an automated test for every test case, defect fixes, traceability updates, CHANGELOG entries |
+| Reviewer | `.claude/agents/reviewer.md` | Independent verification: test-run reports, defect reports, PR review. Never edits code, tests or specs |
 | Onboarding (existing projects) | `.claude/agents/onboarding.md` | As-built documentation of an existing codebase |
 | **Human** | — | Approves documents, answers questions, accepts change requests, merges PRs, cuts releases |
 
 ## 2. Lifecycle and gates
 
 ```
-0 Intake ─► 1 Requirements ─► [Gate A] ─► 2 Design ─► [Gate B] ─► 3 Build ─► 4 Verify ─► 5 Review ─► [Gate C] ─► 6 Release
- planner      planner          human       planner      human      developer   developer   reviewer     human       human
+0 Intake ─► 1 Requirements ─► [Gate A] ─► 2 Design + test cases ─► [Gate B] ─► 3 Build ─► 4 Verify ─► 5 Review ─► [Gate C] ─► 6 Release
+ planner      planner          human       planner                  human      developer   reviewer    reviewer     human       regression run + human
 ```
 
 - **Gate A:** the human approves the PRD (its REQs become `Approved`).
-- **Gate B:** the human approves the technical design and API contract (REQs become `Ready`).
+- **Gate B:** the human approves the technical design, API contract, test plan and test cases (REQs become `Ready`).
+- **Phase 4 Verify:** the reviewer runs every test, records a `RUN` report with a result per test case, and raises a `BUG` for every product failure.
 - **Gate C:** the human merges the PR after the reviewer reports "Ready for human".
+- **Release:** only after a full regression `RUN` meets the test plan's exit criteria and no `Blocker` or `Major` defect is open.
 - Do not start a phase whose gate has not passed. If you are asked to, say which gate is missing and ask.
-- **Defects** (`BUG-###`) skip phases 1–2: record the bug, reproduce it with a failing test, fix it, then review.
+- **Defects** (`BUG-###`) are recorded in `docs/04-delivery/defects/` and skip phases 1–2: record the bug, add a test case and a failing test that reproduces it, fix it, then verify and review.
 - **Changes to approved work** go through a change request (`CR-###`) and a new document version. They never edit approved files.
 
 ## 3. IDs
@@ -33,7 +35,9 @@ These rules apply to every agent and to the main Claude session. **Repository fi
 | `SRC-001` | A requirement source: email, chat, document, meeting, call, ticket | `requirements/register.md` + `requirements/sources/` |
 | `REQ-001` | A requirement or user story (functional or non-functional) | PRD |
 | `AC-001.1` | An acceptance criterion of REQ-001 | PRD |
-| `BUG-001` | A defect | `docs/04-delivery/traceability.md` |
+| `TC-001.1` | A test case for REQ-001: Positive, Negative, Boundary, Error, Security or Non-functional | `docs/04-delivery/test-cases/TC-REQ-001.md` |
+| `RUN-20261113-1405-pr12` | A recorded verification or regression run | `docs/04-delivery/test-runs/` |
+| `BUG-001` | A defect | `docs/04-delivery/defects/` + a traceability row |
 | `CR-001` | A change request against an approved document | `requirements/changes/` |
 | `Q-001` | An open question or an assumption that needs confirmation | `tracking/questions.md` |
 | `DEC-001` | A product, scope or process decision | `tracking/decisions.md` |
@@ -43,7 +47,7 @@ IDs are never reused or renumbered. To get the next one, find the highest existi
 
 ## 4. Document versioning
 
-Applies to specs: BRD, PRD, technical design, API contract, as-built docs.
+Applies to specs: BRD, PRD, technical design, API contract, test plan, as-built docs. Test case files, run reports and defect files have their own rules in the `manage-tests` skill.
 
 1. File names carry the version: `PRD-v1.0.md`, `tech-design-v1.1.md`, `api-contract-v2.0.yaml`.
 2. Every spec starts with the standard header and revision history below.
@@ -85,6 +89,9 @@ sources: [SRC-001]
 | `requirements/register.md` | Every requirement source ever received | planner |
 | `docs/04-delivery/traceability.md` | **Status board**: one row per REQ/BUG with its source → spec → design → code → tests → PR | everyone |
 | `docs/index.md` | Document register: current version and status of every spec | planner, onboarding |
+| `docs/04-delivery/test-cases/` | Documented test cases per REQ, including failure cases, and their last result | planner (designs), developer (automates, may add), reviewer (last result) |
+| `docs/04-delivery/test-runs/` | Every verification and regression run, with a result per test case and every failure explained | reviewer, main session at release |
+| `docs/04-delivery/defects/` | One file per defect: reproduction steps, expected vs actual, evidence, root cause, fix, verification | reviewer (raises, verifies), developer (fixes) |
 | `tracking/questions.md` | Open questions and assumptions | everyone |
 | `tracking/decisions.md` | Product, scope and process decisions | planner |
 | `tracking/progress/<branch>.md` | Plan, log and test evidence for one branch (`/` in the branch name becomes `-`) | the agent working on the branch |
@@ -102,7 +109,7 @@ echo "{\"ts\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"actor\":\"developer\",\"event
 ```
 
 Fields: `ts`, `actor` (planner, developer, reviewer, onboarding, human, main), `event`, `ref` (an ID or a file), optional `from`, `to`, `branch`, `note`.
-Events: `source_captured`, `req_created`, `status_changed`, `doc_created`, `doc_versioned`, `doc_approved`, `cr_raised`, `cr_decided`, `question_raised`, `question_answered`, `decision_recorded`, `task_started`, `task_blocked`, `task_done`, `tests_run`, `pr_opened`, `review_done`.
+Events: `source_captured`, `req_created`, `status_changed`, `doc_created`, `doc_versioned`, `doc_approved`, `cr_raised`, `cr_decided`, `question_raised`, `question_answered`, `decision_recorded`, `task_started`, `task_blocked`, `task_done`, `tests_run`, `test_run_recorded`, `defect_raised`, `defect_closed`, `pr_opened`, `review_done`.
 
 ## 6. Ask, don't assume
 
@@ -133,7 +140,9 @@ Events: `source_captured`, `req_created`, `status_changed`, `doc_created`, `doc_
 ## 8. Quality gates
 
 - No code without an `Approved` REQ, and for API work an `Approved` contract.
-- Every acceptance criterion maps to at least one test, and test names include the REQ-ID.
+- Every acceptance criterion has at least one **positive** and one **failure** test case (Negative, Boundary, Error or Security), or a written `N/A — <reason>`.
+- Every test case is automated, with its REQ and TC IDs in the test name, or marked `Manual` with steps a person can follow.
+- Every verification and release run is recorded as a `RUN` report, every failure in it is classified, and every product failure becomes a `BUG` record.
 - Interactive UI elements have a `data-testid`.
 - Run the tests and report the exact command and result. Never weaken, skip or delete a test to make it pass.
 - No secrets or credentials (passwords, API keys, tokens, payment card numbers) anywhere in the repository. Redact them from captured sources as `[REDACTED: <type>]`.
@@ -148,6 +157,7 @@ Skills live in `.claude/skills/<name>/SKILL.md` and load on demand.
 | `intake-requirement` | planner | Recording an email, chat, document or meeting as `SRC-###`, and raising CRs |
 | `write-requirements` | planner | BRD and PRD with REQ-IDs and acceptance criteria |
 | `write-design` | planner | Technical design, API contract, ADRs |
+| `manage-tests` | planner, developer, reviewer | Test plan, test cases (positive and failure), automated tests, RUN reports, defects, release regression |
 | `implement-feature` | developer | Test-first implementation of a REQ or BUG |
 | `review-pr` | reviewer | Verification checklist and review report |
 | `stack-*` | developer, reviewer | Project-specific commands and conventions. Edit these to match your stack |

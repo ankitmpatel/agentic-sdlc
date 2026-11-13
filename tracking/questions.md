@@ -44,3 +44,27 @@ Status: `Open` (waiting for an answer) · `Assumed` (work continued on the state
 - **Assumption (if Assumed):** Option 1.
 - **Answer:**
 - **Answered by / on / via:**
+
+## Q-003 — Human acceptance (UAT) sign-off before merge?
+- **Raised:** 2026-11-13 by main session (Claude)
+- **Related:** REQ-008, SRC-003
+- **Blocking:** No
+- **Status:** Assumed
+- **Question:** Besides the reviewer's recorded test run, should you personally sign off each REQ (user acceptance testing) before it's merged?
+- **Context:** UAT catches "works as specified but not what I meant", but adds a manual step to every feature.
+- **Options:** 1. Optional: you can add a UAT entry to the RUN, but merging doesn't require it (recommended for a solo developer) 2. Required for every REQ: the reviewer can't report "Ready for human" without it 3. Required only for `Must` REQs with UI
+- **Assumption (if Assumed):** Option 1.
+- **Answer:**
+- **Answered by / on / via:**
+
+## Q-004 — Numeric code-coverage threshold?
+- **Raised:** 2026-11-13 by main session (Claude)
+- **Related:** REQ-008, SRC-003
+- **Blocking:** No
+- **Status:** Assumed
+- **Question:** Should the exit criteria include a minimum line/branch coverage percentage (e.g. 80%)?
+- **Context:** The gate today is requirement coverage: every AC has positive and failure test cases that pass. A percentage adds a code-level safety net but depends on the stack's tooling.
+- **Options:** 1. No percentage; requirement coverage is the gate (recommended) 2. Set a percentage in each project's test plan
+- **Assumption (if Assumed):** Option 1. A project can still add a percentage in its own test plan.
+- **Answer:**
+- **Answered by / on / via:**

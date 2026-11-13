@@ -6,11 +6,12 @@ Status: `Proposed` → `Approved` → `In Design` → `Ready` → `In Progress` 
 
 | ID | Title | Priority | Sources | Spec | Design / contract | Code | Tests | PR | Status | Updated |
 |---|---|---|---|---|---|---|---|---|---|---|
-| REQ-001 | Lean agent roster | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | templates/framework/claude/agents/, templates/brownfield/framework/ | tests/setup.test.sh | — | In Review | 2026-11-12 |
-| REQ-002 | Valid, non-duplicated skills | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | templates/framework/claude/skills/ | tests/setup.test.sh | — | In Review | 2026-11-12 |
-| REQ-003 | Multi-channel requirement intake | Must | SRC-001, SRC-002 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | skills/intake-requirement/, templates/project/requirements/ | tests/setup.test.sh | — | In Review | 2026-11-13 |
-| REQ-004 | Document versioning | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | templates/AGENTS.core.md §4, skill templates, templates/project/docs/index.md | tests/setup.test.sh | — | In Review | 2026-11-12 |
-| REQ-005 | Development process tracking | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | templates/AGENTS.core.md §2–5, templates/project/tracking/ | tests/setup.test.sh | — | In Review | 2026-11-12 |
-| REQ-006 | Ask-when-in-doubt protocol | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | templates/AGENTS.core.md §6, agent files | tests/setup.test.sh | — | In Review | 2026-11-12 |
-| REQ-007 | Safe, tested installer | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | agent-setup.sh, templates/project/claude/settings.json | tests/setup.test.sh | — | In Review | 2026-11-12 |
-| BUG-001 | Re-run re-creates deleted stack skills | Must | found in testing 2026-11-13 | PRD-v1.0 AC-007.6 | n/a | agent-setup.sh (HAS_STACK_SKILL) | tests/setup.test.sh §3 | — | In Review | 2026-11-13 |
+| REQ-001 | Lean agent roster | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | templates/framework/claude/agents/, templates/brownfield/framework/ | tests/setup.test.sh, test-cases/ | — | In Review | 2026-11-12 |
+| REQ-002 | Valid, non-duplicated skills | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | templates/framework/claude/skills/ | tests/setup.test.sh, test-cases/ | — | In Review | 2026-11-12 |
+| REQ-003 | Multi-channel requirement intake | Must | SRC-001, SRC-002 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | skills/intake-requirement/, templates/project/requirements/ | tests/setup.test.sh, test-cases/ | — | In Review | 2026-11-13 |
+| REQ-004 | Document versioning | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | templates/AGENTS.core.md §4, skill templates, templates/project/docs/index.md | tests/setup.test.sh, test-cases/ | — | In Review | 2026-11-12 |
+| REQ-005 | Development process tracking | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | templates/AGENTS.core.md §2–5, templates/project/tracking/ | tests/setup.test.sh, test-cases/ | — | In Review | 2026-11-12 |
+| REQ-006 | Ask-when-in-doubt protocol | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | templates/AGENTS.core.md §6, agent files | tests/setup.test.sh, test-cases/ | — | In Review | 2026-11-12 |
+| REQ-007 | Safe, tested installer | Must | SRC-001 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | agent-setup.sh, templates/project/claude/settings.json | tests/setup.test.sh, test-cases/ | — | In Review | 2026-11-12 |
+| BUG-001 | Re-run re-creates deleted stack skills | Minor | [defect](defects/BUG-001-rerun-recreates-stack-skills.md) | PRD-v1.0 AC-007.6 | n/a | agent-setup.sh (HAS_STACK_SKILL) | TC-007.11 | — | In Review | 2026-11-13 |
+| REQ-008 | Documented test management | Must | SRC-003 | PRD-v1.0 | n/a (installer, see ARCH-MAP v1.0) | templates/framework/claude/skills/manage-tests/, templates/AGENTS.core.md §2–8 | tests/setup.test.sh, test-cases/ | — | In Review | 2026-11-13 |

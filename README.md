@@ -33,11 +33,11 @@ Then:
 ## Lifecycle
 
 ```
-0 Intake ─► 1 Requirements ─► [Gate A] ─► 2 Design ─► [Gate B] ─► 3 Build ─► 4 Verify ─► 5 Review ─► [Gate C] ─► 6 Release
- planner      planner          you         planner      you        developer   developer   reviewer     you         you
+0 Intake ─► 1 Requirements ─► [Gate A] ─► 2 Design + test cases ─► [Gate B] ─► 3 Build ─► 4 Verify ─► 5 Review ─► [Gate C] ─► 6 Release
+ planner      planner          you         planner                  you        developer   reviewer    reviewer     you         regression run + you
 ```
 
-- **Gate A:** you approve the PRD. **Gate B:** you approve the design and contract. **Gate C:** you merge the PR.
+- **Gate A:** you approve the PRD. **Gate B:** you approve the design, contract, test plan and test cases. **Gate C:** you merge the PR.
 - Agents refuse to start a phase whose gate hasn't passed.
 - Bugs (`BUG-###`) skip straight to a failing test and a fix. Changes to approved work go through a change request (`CR-###`) and a new document version.
 
@@ -52,7 +52,8 @@ Then:
 | Answer questions | "Answers: Q-003 option 1, Q-004 use 30 days." |
 | Design | "Use the planner to write the technical design for PRD-v1.0." |
 | Build | "Use the developer to implement REQ-004." |
-| Review | "Use the reviewer to review PR 12." |
+| Review | "Use the reviewer to review PR 12." (records the test run and any defects) |
+| Regression before release | "Run the release regression for 1.2.0 using manage-tests." |
 | See status | "Summarize docs/04-delivery/traceability.md and the open questions." |
 
 ## What gets tracked, and where
@@ -69,11 +70,25 @@ Then:
 | Architecture decisions | `docs/03-architecture/adr/` | `ADR-###` |
 | Per-branch plan, log and test evidence | `tracking/progress/<branch>.md` | — |
 | Timestamped event history | `tracking/activity.jsonl` | — |
+| Test plan and test cases | `docs/04-delivery/test-plan-vX.Y.md`, `docs/04-delivery/test-cases/` | `TC-###.n` |
+| Test runs, with a result per test case | `docs/04-delivery/test-runs/` | `RUN-…` |
+| Defects | `docs/04-delivery/defects/` | `BUG-###` |
 | Review reports | `docs/04-delivery/reviews/` | — |
 | User-visible changes | `CHANGELOG.md` | — |
 
 ### Document versioning
 Specs carry a header (version, status, owner, dates, approver, sources) and a revision history. The status flow is `Draft` → `In Review` → `Approved` → `Superseded`. **Approved files are frozen.** A change creates `PRD-v1.1.md` (additive) or `PRD-v2.0.md` (scope change), and every revision cites the SRC, CR or Q that caused it.
+
+### Testing
+Tests are designed from the acceptance criteria before any code is written, and every result is recorded:
+
+| Step | Who | Record |
+|---|---|---|
+| Test plan and test cases. Every criterion gets a **positive** and a **failure** case (negative, boundary, error, security) | planner, approved by you at Gate B | `docs/04-delivery/test-plan-vX.Y.md`, `test-cases/TC-REQ-###.md` |
+| An automated test for every case, named `REQ-004 TC-004.2 …`. New edge cases are added, never deleted | developer | Test code + the Automated test column |
+| A verification run on every PR, with a result per test case and every failure classified | reviewer | `test-runs/RUN-…md` |
+| A defect record for every product failure: reproduction, expected vs actual, evidence, root cause, fix, verification | reviewer → developer → reviewer | `defects/BUG-###-…md` |
+| A full regression run before release | you or the main session | `test-runs/RUN-…-release-x.y.md` |
 
 ### Asking questions
 Agents stop and ask when a requirement is ambiguous, sources conflict, a choice has product, security, cost or UX impact, or the work would touch approved documents. Each question goes into `tracking/questions.md` with options and a recommendation. Subagents can't prompt you directly, so they end their run with a **"Questions for the human"** list, and the main Claude session asks you. Non-blocking unknowns may proceed on an assumption marked `Assumed` for you to confirm later.
@@ -91,12 +106,13 @@ CHANGELOG.md
     intake-requirement/        # SKILL.md + source and change-request templates
     write-requirements/        # SKILL.md + BRD and PRD templates
     write-design/              # SKILL.md + tech-design, OpenAPI and ADR templates
+    manage-tests/              # SKILL.md + test-plan, test-cases, test-run and defect templates
     implement-feature/
     review-pr/
     stack-node-express/        # example, edit to fit (yours)
     stack-react/               # example, edit to fit (yours)
 docs/
-  index.md  [00-onboarding/]  01-business/  02-product/  03-architecture/adr/  04-delivery/{traceability.md,reviews/}
+  index.md  [00-onboarding/]  01-business/  02-product/  03-architecture/adr/  04-delivery/{traceability.md,test-cases/,test-runs/,defects/,reviews/}
 requirements/
   register.md  inbox/  sources/attachments/  changes/
 tracking/

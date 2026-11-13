@@ -10,7 +10,7 @@ approved_by:
 approved_on:
 supersedes:
 brd:
-sources: [SRC-001, SRC-002]
+sources: [SRC-001, SRC-002, SRC-003]
 ---
 
 # Product Requirements — agentic-sdlc framework v2
@@ -20,6 +20,7 @@ sources: [SRC-001, SRC-002]
 |---|---|---|---|---|
 | 1.0 | 2026-11-12 | main session (Claude) | Initial draft, written alongside the implementation at the owner's direct request in chat | SRC-001, DEC-001 |
 | 1.0 | 2026-11-13 | main session (Claude) | Added AC-003.4 (raw sources committed verbatim) and AC-007.6 (deleted stack skills stay deleted) | SRC-002, Q-001, DEC-002, BUG-001 |
+| 1.0 | 2026-11-13 | main session (Claude) | Added REQ-008 (test management) and AC-007.7 | SRC-003 |
 
 ## 1. Overview
 A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated development process: requirement intake from any channel, versioned documents, traceability, and a question protocol. It ships through `agent-setup.sh`, which can be re-run safely. No BRD exists for this repo; the business goal is stated in SRC-001.
@@ -30,7 +31,7 @@ A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated
 | Owner | Solo developer or lead who uses Claude agents for development | Less setup noise, a full audit trail, no silent assumptions |
 
 ## 3. Scope of this version
-**In scope:** REQ-001 … REQ-007
+**In scope:** REQ-001 … REQ-008
 **Out of scope:** automatic import from email or chat services (input arrives by paste or file drop), GitHub branch-protection setup, release automation.
 
 ## 4. Requirements
@@ -92,6 +93,16 @@ A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated
   - **AC-007.4** `--type new|existing` allows non-interactive runs, and invalid input exits non-zero.
   - **AC-007.5** `.claude/settings.json` denies `gh pr merge`, pushes to main/master, and force-pushes.
   - **AC-007.6** A stack skill the user deleted is not re-created when the installer runs again (BUG-001).
+  - **AC-007.7** A new install creates a `CLAUDE.md` that imports `AGENTS.md`.
+
+### REQ-008 — Documented test management
+- **Story:** As the owner, I want every function tested, with test cases, failure cases and test results documented, so that I can see what was tested, what failed and how it was fixed.
+- **Type:** Functional · **Priority:** Must · **Sources:** SRC-003 · **Status:** In Review
+- **Acceptance criteria:**
+  - **AC-008.1** An install provides a `manage-tests` skill with test-plan, test-case, test-run and defect templates.
+  - **AC-008.2** The rules require at least one positive and one failure test case per acceptance criterion (or a written N/A reason). Each test case is automated with its ID in the test name, or manual with steps.
+  - **AC-008.3** Every verification and release run is recorded as a `RUN` report with a result per test case. Every failure is classified, and every product failure becomes a `BUG` record with reproduction steps, expected vs actual, evidence, root cause, fix and verification.
+  - **AC-008.4** An install provides `docs/04-delivery/test-cases/`, `test-runs/` and `defects/`, and re-running keeps their contents.
 
 ## 5. Risks
 | Risk | Impact | Mitigation |
@@ -104,3 +115,5 @@ A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated
 |---|---|---|---|
 | Q-001 | Commit raw sources to git? Answered: yes, verbatim (SRC-002) | REQ-003 | No (Answered) |
 | Q-002 | Separate QA role? | REQ-001 | No (Assumed) |
+| Q-003 | Human UAT sign-off before merge? | REQ-008 | No (Assumed: optional) |
+| Q-004 | Numeric code-coverage threshold? | REQ-008 | No (Assumed: none) |
