@@ -2,12 +2,12 @@
 doc_id: PRD
 title: Product Requirements — agentic-sdlc framework v2
 version: 1.0
-status: In Review
+status: Approved
 owner: Project owner
 created: 2026-11-12
 updated: 2026-11-13
-approved_by:
-approved_on:
+approved_by: Project owner
+approved_on: 2026-11-13
 supersedes:
 brd:
 sources: [SRC-001, SRC-002, SRC-003]
@@ -21,6 +21,7 @@ sources: [SRC-001, SRC-002, SRC-003]
 | 1.0 | 2026-11-12 | main session (Claude) | Initial draft, written alongside the implementation at the owner's direct request in chat | SRC-001, DEC-001 |
 | 1.0 | 2026-11-13 | main session (Claude) | Added AC-003.4 (raw sources committed verbatim) and AC-007.6 (deleted stack skills stay deleted) | SRC-002, Q-001, DEC-002, BUG-001 |
 | 1.0 | 2026-11-13 | main session (Claude) | Added REQ-008 (test management) and AC-007.7 | SRC-003 |
+| 1.0 | 2026-11-13 | Project owner | Approved | SRC-004 |
 
 ## 1. Overview
 A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated development process: requirement intake from any channel, versioned documents, traceability, and a question protocol. It ships through `agent-setup.sh`, which can be re-run safely. No BRD exists for this repo; the business goal is stated in SRC-001.
@@ -38,7 +39,7 @@ A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated
 
 ### REQ-001 — Lean agent roster
 - **Story:** As the owner, I want a few agents with clear ownership so that I know which one to use and they don't overlap.
-- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** In Review
+- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** Approved (built; PR In Review)
 - **Acceptance criteria:**
   - **AC-001.1** Given a new project install, when I list `.claude/agents/`, then exactly `planner`, `developer` and `reviewer` exist.
   - **AC-001.2** Given an existing-project install, then `onboarding` also exists.
@@ -46,7 +47,7 @@ A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated
 
 ### REQ-002 — Valid, non-duplicated skills
 - **Story:** As the owner, I want skills that Claude Code actually loads and that add content the agents don't already have.
-- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** In Review
+- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** Approved (built; PR In Review)
 - **Acceptance criteria:**
   - **AC-002.1** Every skill is installed as `.claude/skills/<name>/SKILL.md`, and its frontmatter `name` equals `<name>`.
   - **AC-002.2** Every core skill an agent names is installed.
@@ -54,7 +55,7 @@ A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated
 
 ### REQ-003 — Multi-channel requirement intake
 - **Story:** As the owner, I want every email, chat, document or meeting that carries requirements recorded with an ID, date and sender, so that each requirement traces back to where it came from.
-- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** In Review
+- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** Approved (built; PR In Review)
 - **Acceptance criteria:**
   - **AC-003.1** An install provides `requirements/register.md`, `requirements/inbox/`, `requirements/sources/` and `requirements/changes/`.
   - **AC-003.2** The `intake-requirement` skill defines SRC records with channel, sender, original date, reference, verbatim content and redaction rules.
@@ -63,7 +64,7 @@ A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated
 
 ### REQ-004 — Document versioning
 - **Story:** As the owner, I want every specification versioned with status, approval and revision history, so that approved documents are never silently changed.
-- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** In Review
+- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** Approved (built; PR In Review)
 - **Acceptance criteria:**
   - **AC-004.1** `AGENTS.md` defines the standard header, the status flow, the freeze-on-approval rule and the minor/major bump rules.
   - **AC-004.2** All spec templates contain the header and a revision-history table.
@@ -71,21 +72,21 @@ A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated
 
 ### REQ-005 — Development process tracking
 - **Story:** As the owner, I want to see where every requirement stands and what happened when.
-- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** In Review
+- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** Approved (built; PR In Review)
 - **Acceptance criteria:**
   - **AC-005.1** An install provides the traceability/status board, the questions log, the decision log, a progress template, the activity ledger and the CHANGELOG.
   - **AC-005.2** `AGENTS.md` defines the lifecycle with gates A/B/C, the ID scheme, the ledger schema and its event names.
 
 ### REQ-006 — Ask-when-in-doubt protocol
 - **Story:** As the owner, I want agents to ask rather than guess when something is unclear.
-- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** In Review
+- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** Approved (built; PR In Review)
 - **Acceptance criteria:**
   - **AC-006.1** `AGENTS.md` lists the triggers for asking and the procedure, including the subagent case (the subagent cannot prompt the user, so it returns its questions and the main session asks).
   - **AC-006.2** Every agent's instructions end with a "Questions for the human" output.
 
 ### REQ-007 — Safe, tested installer
 - **Story:** As the owner, I want to re-run the installer to upgrade without losing tracking data or customizations.
-- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** In Review
+- **Type:** Functional · **Priority:** Must · **Sources:** SRC-001 · **Status:** Approved (built; PR In Review)
 - **Acceptance criteria:**
   - **AC-007.1** Re-running keeps the activity ledger, traceability, customized stack skills and `CLAUDE.md`.
   - **AC-007.2** A changed framework file is backed up before it is replaced.
@@ -97,7 +98,7 @@ A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated
 
 ### REQ-008 — Documented test management
 - **Story:** As the owner, I want every function tested, with test cases, failure cases and test results documented, so that I can see what was tested, what failed and how it was fixed.
-- **Type:** Functional · **Priority:** Must · **Sources:** SRC-003 · **Status:** In Review
+- **Type:** Functional · **Priority:** Must · **Sources:** SRC-003 · **Status:** Approved (built; PR In Review)
 - **Acceptance criteria:**
   - **AC-008.1** An install provides a `manage-tests` skill with test-plan, test-case, test-run and defect templates.
   - **AC-008.2** The rules require at least one positive and one failure test case per acceptance criterion (or a written N/A reason). Each test case is automated with its ID in the test name, or manual with steps.

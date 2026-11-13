@@ -24,3 +24,7 @@
 {"ts":"2026-11-13T02:50:47Z","actor":"main","event":"defect_raised","ref":"BUG-001","to":"Fixed","note":"defect file back-filled; fixed in abcfbde"}
 {"ts":"2026-11-13T02:52:25Z","actor":"main","event":"test_run_recorded","ref":"RUN-20261113-0251-REQ-001-branch","branch":"feature/REQ-001-lean-sdlc-framework","note":"38 pass, 0 fail, 1 skipped; exit criteria Met; commit e82e8e5"}
 {"ts":"2026-11-13T02:52:25Z","actor":"main","event":"status_changed","ref":"BUG-001","from":"Fixed","to":"Verified","note":"TC-007.11 pass in RUN-20261113-0251-REQ-001-branch"}
+{"ts":"2026-11-13T02:58:50Z","actor":"main","event":"source_captured","ref":"SRC-004","note":"chat: approval of PRD, ARCH-MAP, TEST-PLAN"}
+{"ts":"2026-11-13T02:58:50Z","actor":"human","event":"doc_approved","ref":"docs/02-product/PRD-v1.0.md","from":"In Review","to":"Approved","note":"Gate A; recorded by main via SRC-004"}
+{"ts":"2026-11-13T02:58:50Z","actor":"human","event":"doc_approved","ref":"docs/00-onboarding/architecture-map-v1.0.md","from":"In Review","to":"Approved","note":"Gate B; recorded by main via SRC-004"}
+{"ts":"2026-11-13T02:58:50Z","actor":"human","event":"doc_approved","ref":"docs/04-delivery/test-plan-v1.0.md","from":"In Review","to":"Approved","note":"Gate B incl. TC-REQ-001..008; recorded by main via SRC-004"}

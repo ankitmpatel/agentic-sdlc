@@ -4,8 +4,8 @@ The current version and status of every specification. Older versions stay in th
 
 | Doc ID | Title | Current version | Status | File | Updated | Approved by / on |
 |---|---|---|---|---|---|---|
-| ARCH-MAP | Architecture Map — agentic-sdlc | 1.0 | In Review | [architecture-map-v1.0.md](00-onboarding/architecture-map-v1.0.md) | 2026-11-12 | |
-| TEST-PLAN | Test Plan — agentic-sdlc framework v2 | 1.0 | In Review | [test-plan-v1.0.md](04-delivery/test-plan-v1.0.md) | 2026-11-13 | |
-| PRD | Product Requirements — agentic-sdlc framework v2 | 1.0 | In Review | [PRD-v1.0.md](02-product/PRD-v1.0.md) | 2026-11-12 | |
+| ARCH-MAP | Architecture Map — agentic-sdlc | 1.0 | Approved | [architecture-map-v1.0.md](00-onboarding/architecture-map-v1.0.md) | 2026-11-13 | Project owner / 2026-11-13 |
+| TEST-PLAN | Test Plan — agentic-sdlc framework v2 | 1.0 | Approved | [test-plan-v1.0.md](04-delivery/test-plan-v1.0.md) | 2026-11-13 | Project owner / 2026-11-13 |
+| PRD | Product Requirements — agentic-sdlc framework v2 | 1.0 | Approved | [PRD-v1.0.md](02-product/PRD-v1.0.md) | 2026-11-13 | Project owner / 2026-11-13 |
 
 Status: `Draft` → `In Review` → `Approved` → `Superseded`. Only the human approves.

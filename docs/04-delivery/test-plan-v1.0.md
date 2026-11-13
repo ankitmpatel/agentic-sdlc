@@ -2,12 +2,12 @@
 doc_id: TEST-PLAN
 title: Test Plan — agentic-sdlc framework v2
 version: 1.0
-status: In Review
+status: Approved
 owner: Project owner
 created: 2026-11-13
 updated: 2026-11-13
-approved_by:
-approved_on:
+approved_by: Project owner
+approved_on: 2026-11-13
 supersedes:
 prd: PRD-v1.0
 design: docs/00-onboarding/architecture-map-v1.0.md
@@ -20,6 +20,7 @@ sources: [PRD-v1.0, SRC-003]
 | Version | Date | Author | Change | Reason |
 |---|---|---|---|---|
 | 1.0 | 2026-11-13 | main session (Claude) | Initial draft | SRC-003, REQ-008 |
+| 1.0 | 2026-11-13 | Project owner | Approved | SRC-004 |
 
 ## 1. Scope
 **In scope:** REQ-001 … REQ-008 (PRD-v1.0): what the installer produces, and the rule text in the installed files.

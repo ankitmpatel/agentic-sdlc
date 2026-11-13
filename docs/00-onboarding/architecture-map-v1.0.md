@@ -2,12 +2,12 @@
 doc_id: ARCH-MAP
 title: Architecture Map — agentic-sdlc
 version: 1.0
-status: In Review
+status: Approved
 owner: Project owner
 created: 2026-11-12
-updated: 2026-11-12
-approved_by:
-approved_on:
+updated: 2026-11-13
+approved_by: Project owner
+approved_on: 2026-11-13
 supersedes:
 sources: [As-built: agent-setup.sh, templates/, tests/setup.test.sh]
 ---
@@ -18,6 +18,7 @@ sources: [As-built: agent-setup.sh, templates/, tests/setup.test.sh]
 | Version | Date | Author | Change | Reason |
 |---|---|---|---|---|
 | 1.0 | 2026-11-12 | main session (Claude) | Initial map after the v2 restructure | SRC-001 |
+| 1.0 | 2026-11-13 | Project owner | Approved | SRC-004 |
 
 ## Purpose
 This repository is an **installer**. It produces no running application. `agent-setup.sh` copies `templates/` into a target project to set up the agentic SDLC workflow. The repository also uses the framework on itself; its own `.claude/`, `docs/`, `requirements/` and `tracking/` are an installed copy.
