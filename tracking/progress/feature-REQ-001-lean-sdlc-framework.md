@@ -27,6 +27,8 @@
 | Date | Command | Result |
 |---|---|---|
 | 2026-11-12 | `bash tests/setup.test.sh` | 54 passed, 0 failed (YAML check skipped: PyYAML not installed) |
+| 2026-11-13 | `bash tests/setup.test.sh` | 60 passed, 0 failed (YAML check skipped: PyYAML not installed) |
 
 ## Blockers and questions
-- Q-001, Q-002 (non-blocking, Assumed)
+- Q-001 answered (SRC-002)
+- Q-002 (non-blocking, Assumed)

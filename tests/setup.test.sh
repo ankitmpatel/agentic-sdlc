@@ -86,6 +86,9 @@ check "every core skill named by an agent is installed" skills_referenced_exist 
 check "settings.json is valid JSON" valid_json "$N/.claude/settings.json"
 check "settings.json denies gh pr merge" grep -q 'gh pr merge' "$N/.claude/settings.json"
 check "API contract template is valid YAML" valid_yaml "$N/.claude/skills/write-design/api-contract-template.yaml"
+check "intake skill requires committing raw sources (DEC-002)" grep -q 'Raw sources are always committed' "$N/.claude/skills/intake-requirement/SKILL.md"
+check "AGENTS.md requires committing raw sources (DEC-002)" grep -q 'committed verbatim' "$N/AGENTS.md"
+check "no .gitignore excludes requirement sources" sh -c "! grep -qs 'requirements' '$N/.gitignore'"
 check "no template folder named .claude leaked from templates/" sh -c "! find '$ROOT/templates' -name .claude | grep -q ."
 
 echo "2. Existing project"
@@ -110,6 +113,10 @@ check "activity ledger kept" grep -q '"event":"test"' "$N/tracking/activity.json
 check "traceability rows kept" grep -q 'REQ-001 | Login' "$N/docs/04-delivery/traceability.md"
 check "customized stack skill kept" grep -q 'custom command' "$N/.claude/skills/stack-react/SKILL.md"
 check "CLAUDE.md kept" grep -q 'my note' "$N/CLAUDE.md"
+check "example stack skills installed on first run" test -f "$N/.claude/skills/stack-node-express/SKILL.md"
+rm -rf "$N/.claude/skills/stack-node-express"
+check "re-run after deleting a stack skill exits 0" install "$N" new
+check "deleted stack skill is not re-created" test ! -e "$N/.claude/skills/stack-node-express"
 check "changed AGENTS.md restored from template" sh -c "! grep -q 'local rule' '$N/AGENTS.md'"
 check "changed AGENTS.md backed up" sh -c "grep -l 'local rule' '$N'/AGENTS.md.bak-* | grep -q ."
 

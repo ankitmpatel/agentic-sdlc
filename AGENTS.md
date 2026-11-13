@@ -136,7 +136,8 @@ Events: `source_captured`, `req_created`, `status_changed`, `doc_created`, `doc_
 - Every acceptance criterion maps to at least one test, and test names include the REQ-ID.
 - Interactive UI elements have a `data-testid`.
 - Run the tests and report the exact command and result. Never weaken, skip or delete a test to make it pass.
-- No secrets, credentials or personal data in code, docs or logs. Redact them from captured sources.
+- No secrets or credentials (passwords, API keys, tokens, payment card numbers) anywhere in the repository. Redact them from captured sources as `[REDACTED: <type>]`.
+- Raw requirement sources (emails, chats, documents) are **committed verbatim** under `requirements/sources/`, including names and contact details, because they are the audit trail. Keep personal data out of code, test fixtures and logs.
 
 ## 9. Skills
 

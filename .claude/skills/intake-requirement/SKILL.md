@@ -6,6 +6,8 @@ description: Capture a requirement source — an email, chat message or thread, 
 
 **Goal:** nothing becomes a requirement until its source is recorded, dated, attributed and traceable.
 
+**Raw sources are always committed to git** (DEC-002). The original email, chat or document is the permanent audit trail. Keep it verbatim and never git-ignore, delete or replace it with a summary. The only exception: credentials and payment data are redacted (step 2.4).
+
 Templates in this folder: `source-template.md`, `change-request-template.md`.
 
 ## 1. Find the input
@@ -23,8 +25,8 @@ If one input contains several unrelated threads, create one `SRC` per thread.
    - **from / participants:** names and roles as they appear in the source
    - **received:** the original date of the message or document, not today's date. If unknown, write `unknown` and say so.
    - **reference:** subject line, thread or channel name, document title and version, or ticket number
-4. **Original content:** paste it verbatim. You may remove only signatures, legal footers and quoted earlier replies that are already captured; note what you removed. **Redact** passwords, tokens, payment data and other secrets, and note the redaction.
-5. **Original files:** move them out of the inbox into `requirements/sources/attachments/SRC-###/` with `git mv` (or `mv` if untracked). For `.docx`, `.pdf` and other binary files, extract the text into the record if you can. Otherwise summarize it and say the summary is not verbatim.
+4. **Original content:** paste the complete content verbatim, including headers (From, To, Date, Subject), names, contact details, signatures and quoted replies. Do not trim, reword or correct it. **Redact only** passwords, API keys, tokens, other credentials and payment card numbers, replacing each with `[REDACTED: <type>]`. List every redaction under the record's "Original content" heading.
+5. **Original files:** move them out of the inbox into `requirements/sources/attachments/SRC-###/` with `git mv` (or `mv` if untracked), and commit them. Apply step 4's redactions to the files as well; if a file can't be edited safely (a binary file containing a credential), stop and ask. For `.docx`, `.pdf` and other binary files, also extract the text into the record if you can. Otherwise summarize it and say the summary is not verbatim. **The original file is always kept and committed alongside the extract or summary.**
 
 ## 3. Analyse
 For each statement that asks for, changes or constrains something:

@@ -7,7 +7,7 @@ All notable changes to this project are recorded here, following [Keep a Changel
 ### Added
 - Planner, developer and reviewer agents, plus onboarding for existing projects (REQ-001)
 - Skills in the `.claude/skills/<name>/SKILL.md` format with BRD, PRD, source-record, change-request, technical-design, OpenAPI and ADR templates (REQ-002)
-- Requirement intake from email, chat, documents and meetings: an `SRC-###` source register, an inbox and change requests (REQ-003)
+- Requirement intake from email, chat, documents and meetings: an `SRC-###` source register, an inbox and change requests. Raw sources are committed verbatim; only credentials are redacted (REQ-003, DEC-002)
 - Document versioning rules, a standard header and the `docs/index.md` document register (REQ-004)
 - Gated lifecycle, ID scheme, traceability status board, questions and decisions logs, progress template and activity-ledger schema (REQ-005)
 - Ask-when-in-doubt protocol, including how subagents return their questions (REQ-006)
@@ -15,6 +15,9 @@ All notable changes to this project are recorded here, following [Keep a Changel
 
 ### Changed
 - `agent-setup.sh` installs from `templates/` instead of inline heredocs. Re-running upgrades framework files (backing up local changes) and never overwrites tracking data or customized stack skills (REQ-007)
+
+### Fixed
+- Re-running the installer no longer re-creates a stack skill you deleted (BUG-001)
 
 ### Removed
 - The `pm`, `architect`, `backend-dev`, `ui-dev` and `qa-engineer` agents and the flat `.claude/skills/*.md` files. The installer lists them in existing projects for removal (REQ-001, REQ-002)

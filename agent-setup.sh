@@ -120,12 +120,25 @@ install_file() {
     fi
 }
 
+# Example stack skills are installed only into a project that has no stack skill yet,
+# so a stack skill the user deleted or replaced doesn't come back on re-run.
+HAS_STACK_SKILL=0
+for d in .claude/skills/stack-*/; do
+    if [ -d "$d" ]; then
+        HAS_STACK_SKILL=1
+    fi
+done
+
 # install_tree <template root> <managed|missing>
 install_tree() {
     local root="$1" mode="$2" rel
     [ -d "$root" ] || return 0
     while IFS= read -r rel; do
         rel="${rel#./}"
+        case "$rel" in
+            claude/skills/stack-*)
+                [ "$HAS_STACK_SKILL" -eq 0 ] || continue ;;
+        esac
         install_file "$root/$rel" "$(target_path "$rel")" "$mode"
     done < <(cd "$root" && find . -type f | sort)
 }

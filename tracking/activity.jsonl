@@ -8,3 +8,10 @@
 {"ts":"2026-11-12T08:45:00Z","actor":"main","event":"question_raised","ref":"Q-002","note":"Assumed: no separate QA role"}
 {"ts":"2026-11-12T08:45:00Z","actor":"main","event":"tests_run","ref":"tests/setup.test.sh","branch":"feature/REQ-001-lean-sdlc-framework","note":"54 passed, 0 failed"}
 {"ts":"2026-11-12T08:45:00Z","actor":"main","event":"status_changed","ref":"REQ-001..REQ-007","from":"In Progress","to":"In Review","branch":"feature/REQ-001-lean-sdlc-framework"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"source_captured","ref":"SRC-002","note":"chat: answer to Q-001"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"question_answered","ref":"Q-001","from":"Assumed","to":"Answered","note":"commit raw sources verbatim"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"decision_recorded","ref":"DEC-002","note":"raw sources committed verbatim, credentials redacted"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"doc_versioned","ref":"docs/02-product/PRD-v1.0.md","note":"In Review draft edited: AC-003.4, AC-007.6"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"req_created","ref":"BUG-001","to":"In Progress","note":"re-run re-creates deleted stack skills"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"tests_run","ref":"tests/setup.test.sh","branch":"feature/REQ-001-lean-sdlc-framework","note":"60 passed, 0 failed"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"status_changed","ref":"BUG-001","from":"In Progress","to":"In Review","branch":"feature/REQ-001-lean-sdlc-framework"}

@@ -28,7 +28,8 @@ linked: [REQ-000, CR-000, Q-000, BUG-000]
 - Q-000 — <question>
 
 ## Original content
-<!-- Verbatim. Note any removed signatures or quoted replies, and any redactions. -->
+<!-- Complete and verbatim, including headers, signatures and quoted replies. Only credentials and payment card numbers are replaced with [REDACTED: <type>]. -->
+Redactions: none
 
 ```text
 

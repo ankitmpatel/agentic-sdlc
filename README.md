@@ -110,6 +110,7 @@ Copy `.claude/skills/stack-node-express/` to `.claude/skills/stack-<name>/`, upd
 ## Guardrails
 - Repository files are the source of truth; chat memory is not.
 - No merging and no pushing to `main` by agents. `.claude/settings.json` blocks the common commands, but deny rules match command prefixes only, so **GitHub branch protection is the real safeguard**.
+- Raw emails, chats and documents are committed verbatim as the audit trail; only credentials and payment card numbers are redacted. Keep the repository private if sources contain personal data.
 - IDs appear in every branch, commit and PR: `feat(REQ-012): ...`.
 - Every acceptance criterion is covered by a test that names the REQ. No skipped or weakened tests.
 - Existing projects: onboard first, make surgical changes, and add characterization tests before touching existing files.

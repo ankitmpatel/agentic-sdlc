@@ -17,7 +17,7 @@ Status: `Open` (waiting for an answer) · `Assumed` (work continued on the state
 - **Context:** <why it matters and what depends on it>
 - **Options:** 1. <recommended option> (recommended) 2. <alternative> 3. <alternative>
 - **Assumption (if Assumed):** <what work continued on>
-- **Answer:**
+- **Answer:** Yes. Raw emails and chats must be committed to git (option 1). Sources are kept verbatim; only credentials and payment card numbers are redacted (DEC-002).
 - **Answered by / on / via:** <name> / YYYY-MM-DD / chat | email SRC-000 | meeting SRC-000
 -->
 
@@ -25,13 +25,13 @@ Status: `Open` (waiting for an answer) · `Assumed` (work continued on the state
 - **Raised:** 2026-11-12 by main session (Claude)
 - **Related:** REQ-003, SRC-001
 - **Blocking:** No
-- **Status:** Assumed
+- **Status:** Answered
 - **Question:** Should captured emails, chats and documents (and their attachments) be committed to the repository?
 - **Context:** Committing gives a full audit trail, but raw sources can contain personal data or confidential material.
 - **Options:** 1. Commit, with redaction of secrets and personal data (recommended) 2. Commit only the SRC summary; keep originals outside the repo 3. Git-ignore `requirements/sources/attachments/`
 - **Assumption (if Assumed):** Option 1, with redaction rules in the intake skill and a privacy note in the inbox README.
-- **Answer:**
-- **Answered by / on / via:**
+- **Answer:** Yes. Raw emails and chats must be committed to git (option 1). Sources are kept verbatim; only credentials and payment card numbers are redacted (DEC-002).
+- **Answered by / on / via:** Project owner / 2026-11-13 / chat SRC-002
 
 ## Q-002 — Separate QA role?
 - **Raised:** 2026-11-12 by main session (Claude)

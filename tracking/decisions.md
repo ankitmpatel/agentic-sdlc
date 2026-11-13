@@ -22,3 +22,12 @@ Product, scope, priority and process decisions. Architecture decisions go in `do
 - **Decision:** Replace them with planner, developer and reviewer (plus onboarding for existing projects), and five core skills plus editable stack skills, keeping the full gated process.
 - **Consequences:** The PM and architect roles merge into planner; backend, UI and QA merge into developer, with reviewer verification. Previous files are reported by the installer for removal.
 - **Supersedes:** none
+
+## DEC-002 — Raw requirement sources are committed verbatim
+- **Date:** 2026-11-13
+- **Decided by:** Project owner
+- **Related:** Q-001, SRC-002, REQ-003
+- **Context:** Raw emails and chats can contain personal data; Q-001 asked whether they belong in git.
+- **Decision:** Commit raw emails, chats and documents, and their original files, verbatim, with headers, names, signatures and quoted replies kept. Credentials and payment card numbers are still redacted as `[REDACTED: <type>]`.
+- **Consequences:** The repository holds personal data and should stay private. The intake skill, AGENTS.md §8 and the inbox README were updated; tests assert the rule.
+- **Supersedes:** none

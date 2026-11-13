@@ -11,4 +11,4 @@ The planner records each item as `requirements/sources/SRC-###-*.md`, moves the 
 
 You can also skip the inbox: paste the email or chat straight into Claude and say "capture this as a requirement source".
 
-> **Privacy:** these files are committed to git. Remove anything that shouldn't live in the repository (personal data, secrets) before dropping it here, or ask the planner to redact it.
+> **Committed as the permanent record.** Sources are committed to git exactly as received, including names, addresses, signatures and quoted replies. The planner redacts only passwords, API keys, tokens and payment card numbers. Anyone with access to the repository can read them, so keep the repository private if sources contain personal or confidential information.

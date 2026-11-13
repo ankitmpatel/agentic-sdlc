@@ -5,12 +5,12 @@ version: 1.0
 status: In Review
 owner: Project owner
 created: 2026-11-12
-updated: 2026-11-12
+updated: 2026-11-13
 approved_by:
 approved_on:
 supersedes:
 brd:
-sources: [SRC-001]
+sources: [SRC-001, SRC-002]
 ---
 
 # Product Requirements — agentic-sdlc framework v2
@@ -19,6 +19,7 @@ sources: [SRC-001]
 | Version | Date | Author | Change | Reason |
 |---|---|---|---|---|
 | 1.0 | 2026-11-12 | main session (Claude) | Initial draft, written alongside the implementation at the owner's direct request in chat | SRC-001, DEC-001 |
+| 1.0 | 2026-11-13 | main session (Claude) | Added AC-003.4 (raw sources committed verbatim) and AC-007.6 (deleted stack skills stay deleted) | SRC-002, Q-001, DEC-002, BUG-001 |
 
 ## 1. Overview
 A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated development process: requirement intake from any channel, versioned documents, traceability, and a question protocol. It ships through `agent-setup.sh`, which can be re-run safely. No BRD exists for this repo; the business goal is stated in SRC-001.
@@ -57,6 +58,7 @@ A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated
   - **AC-003.1** An install provides `requirements/register.md`, `requirements/inbox/`, `requirements/sources/` and `requirements/changes/`.
   - **AC-003.2** The `intake-requirement` skill defines SRC records with channel, sender, original date, reference, verbatim content and redaction rules.
   - **AC-003.3** Changes to approved requirements produce a `CR-###` that needs a human decision.
+  - **AC-003.4** Raw sources and their original files are committed to git verbatim. Only credentials and payment card numbers are redacted, and no installed file git-ignores them (SRC-002).
 
 ### REQ-004 — Document versioning
 - **Story:** As the owner, I want every specification versioned with status, approval and revision history, so that approved documents are never silently changed.
@@ -89,15 +91,16 @@ A leaner agent roster with valid Claude Code skills, plus a fully tracked, gated
   - **AC-007.3** Files from the previous framework version are reported, not deleted.
   - **AC-007.4** `--type new|existing` allows non-interactive runs, and invalid input exits non-zero.
   - **AC-007.5** `.claude/settings.json` denies `gh pr merge`, pushes to main/master, and force-pushes.
+  - **AC-007.6** A stack skill the user deleted is not re-created when the installer runs again (BUG-001).
 
 ## 5. Risks
 | Risk | Impact | Mitigation |
 |---|---|---|
 | Deny rules match command prefixes only (e.g. a plain `git push` while on `main` isn't caught) | Medium | README and installer recommend GitHub branch protection |
-| Raw sources may contain personal data | Medium | Redaction rules in the intake skill, privacy note in the inbox README, Q-001 |
+| Raw sources containing personal data are committed (DEC-002) | Medium | Only credentials are redacted; the README and the inbox README tell you to keep the repository private |
 
 ## 6. Open questions
 | Q | Question | Affects | Blocking |
 |---|---|---|---|
-| Q-001 | Commit raw sources to git? | REQ-003 | No (Assumed) |
+| Q-001 | Commit raw sources to git? Answered: yes, verbatim (SRC-002) | REQ-003 | No (Answered) |
 | Q-002 | Separate QA role? | REQ-001 | No (Assumed) |
