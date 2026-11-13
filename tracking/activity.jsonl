@@ -45,3 +45,4 @@
 {"ts":"2026-11-13T03:30:48Z","actor":"main","event":"tests_run","ref":"tests/setup.test.sh","branch":"feature/REQ-001-lean-sdlc-framework","note":"red before code: 21 pass, 40 fail"}
 {"ts":"2026-11-13T03:30:48Z","actor":"main","event":"tests_run","ref":"tests/setup.test.sh","branch":"feature/REQ-001-lean-sdlc-framework","note":"green: 61 pass, 0 fail, 1 skipped"}
 {"ts":"2026-11-13T03:30:48Z","actor":"main","event":"status_changed","ref":"REQ-009","from":"Approved","to":"In Review","branch":"feature/REQ-001-lean-sdlc-framework"}
+{"ts":"2026-11-13T03:31:52Z","actor":"main","event":"test_run_recorded","ref":"RUN-20261113-0331-REQ-009-branch","branch":"feature/REQ-001-lean-sdlc-framework","note":"53 pass, 0 fail, 1 skipped; exit criteria Met; commit de1ba2a"}

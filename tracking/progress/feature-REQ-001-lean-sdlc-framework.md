@@ -20,7 +20,7 @@
 - [x] Owner approves PRD-v1.0, ARCH-MAP v1.0 and TEST-PLAN v1.0 (SRC-004)
 - [x] Owner answers Q-002, Q-003, Q-004 (SRC-005: defaults, DEC-003)
 - [x] REQ-009: all setup through the installer (test cases first, tests red, then implementation)
-- [ ] Record RUN for REQ-009
+- [x] Record RUN for REQ-009 (RUN-20261113-0331-REQ-009-branch)
 - [ ] Push branch, open PR, reviewer run, owner merges
 
 ## Log
@@ -35,6 +35,7 @@
 | 2026-11-13 | Owner approved PRD-v1.0, ARCH-MAP v1.0 and TEST-PLAN v1.0 (SRC-004). Gates A and B passed after the fact. |
 | 2026-11-13 | Q-002–Q-004 answered with the defaults (SRC-005, DEC-003). The approved PRD and test plan were not edited (frozen); questions.md is the record. README setup instructions updated. |
 | 2026-11-13 | SRC-006/SRC-007: REQ-009 approved before build (PRD-v1.1, TEST-PLAN v1.1; v1.0 Superseded). Wrote TC-REQ-009, then the tests (red: 40 failed), then the code (green: 61 passed, 1 skipped). DEC-004: the installer never touches git or GitHub. |
+| 2026-11-13 | RUN-20261113-0331-REQ-009-branch on de1ba2a: 53/54 test cases pass, 1 skipped (TC-002.3), exit criteria Met. TC-009.5 run in a pseudo-terminal. |
 
 ## Test evidence
 | Date | Command | Result |

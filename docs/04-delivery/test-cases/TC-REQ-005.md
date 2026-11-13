@@ -17,6 +17,6 @@ updated: 2026-11-13
 ## Test cases
 | TC | AC | Type | Title | Preconditions / data | Steps | Expected result | Mode | Automated test | Last result |
 |---|---|---|---|---|---|---|---|---|---|
-| TC-005.1 | AC-005.1 | Positive | Tracking files and folders created | New install | Check paths | Traceability, questions, decisions, ledger, progress template, CHANGELOG, ADR and reviews folders exist | Auto | `tests/setup.test.sh › "TC-005.1 tracking files created"` | Pass (RUN-20261113-0251-REQ-001-branch) |
-| TC-005.2 | AC-005.2 | Positive | AGENTS.md defines gates and ledger events | New install | grep AGENTS.md | `Gate A` and `test_run_recorded` present | Auto | `tests/setup.test.sh › "TC-005.2 AGENTS.md defines gates and the ledger events"` | Pass (RUN-20261113-0251-REQ-001-branch) |
-| TC-007.4 | AC-005.1 | Negative | Tracking data survives re-install (shared with REQ-007) | — | See TC-REQ-007 | — | Auto | `tests/setup.test.sh › "TC-007.4 activity ledger and traceability rows kept"` | Pass (RUN-20261113-0251-REQ-001-branch) |
+| TC-005.1 | AC-005.1 | Positive | Tracking files and folders created | New install | Check paths | Traceability, questions, decisions, ledger, progress template, CHANGELOG, ADR and reviews folders exist | Auto | `tests/setup.test.sh › "TC-005.1 tracking files created"` | Pass (RUN-20261113-0331-REQ-009-branch) |
+| TC-005.2 | AC-005.2 | Positive | AGENTS.md defines gates and ledger events | New install | grep AGENTS.md | `Gate A` and `test_run_recorded` present | Auto | `tests/setup.test.sh › "TC-005.2 AGENTS.md defines gates and the ledger events"` | Pass (RUN-20261113-0331-REQ-009-branch) |
+| TC-007.4 | AC-005.1 | Negative | Tracking data survives re-install (shared with REQ-007) | — | See TC-REQ-007 | — | Auto | `tests/setup.test.sh › "TC-007.4 activity ledger and traceability rows kept"` | Pass (RUN-20261113-0331-REQ-009-branch) |
