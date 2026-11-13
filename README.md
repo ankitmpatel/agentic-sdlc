@@ -1,291 +1,182 @@
 # agentic-sdlc
 
-A lightweight agent-based SDLC scaffold for new and existing projects. It creates global guardrails, project tracking, role-based agents, and optional reusable skills so the workflow can be adapted to different stacks.
-
-## What this generates
-
-When you run the setup script in a target project directory, it creates:
-
-- `AGENTS.md` with cross-agent guardrails
-- `.claude/agents/` with role-based instructions for:
-  - PM
-  - Architect
-  - Backend Developer
-  - UI Developer
-  - QA Engineer
-  - Reviewer
-  - Onboarding Analyst (existing projects only)
-- `.claude/skills/` with reusable workflow templates such as:
-  - `create-brd`
-  - `create-prd`
-  - `create-design-doc`
-  - `implement-backend`
-  - `implement-frontend`
-  - `run-qa-checks`
-  - stack-specific examples such as `backend-node-express` and `frontend-react`
-- Standard project documentation folders:
-  - `docs/01-business`
-  - `docs/02-product`
-  - `docs/03-architecture`
-  - `docs/04-delivery`
-  - `docs/00-onboarding` for brownfield onboarding
-- Tracking artifacts:
-  - `CHANGELOG.md`
-  - `tracking/activity.jsonl`
-  - `tracking/progress/`
+A lean, fully tracked software development process for Claude Code. Three agents and six skills take a feature from a raw email or chat message to a reviewed PR, with document versioning, documented test cases and test runs, traceability, and agents that ask instead of guessing.
 
 ## Setup
 
-Prerequisites:
+**Prerequisites**
+- Bash 3.2 or later (the macOS default works) and Git
+- [Claude Code](https://claude.com/claude-code)
+- Optional: the GitHub CLI, so agents can open PRs themselves: `brew install gh && gh auth login`. Without it, agents push the branch and give you a link to open the PR.
 
-- Bash
-- Claude Code or another agent runner
-- GitHub CLI (`gh`) for PR workflows
-
-Run the script from the root of the project you want to initialize:
-
+**Install.** Everything is set up by one script, for new and existing projects: rules, agents, skills, tracking files, folders, the stack skill, and the `src/`/`tests/` scaffold for new projects.
 ```bash
-bash /path/to/agentic-sdlc/agent-setup.sh
+git clone https://github.com/ankitmpatel/agentic-sdlc.git
+cd /path/to/your-project
+bash /path/to/agentic-sdlc/agent-setup.sh            # interactive: asks project type and stack
 ```
 
-The script will ask whether the target is:
-
-- New project: creates `src/` and `tests/` scaffolding
-- Existing project: preserves current source files and creates onboarding documentation folders
-
-## Why skills are included
-
-Skills are optional reusable execution patterns. They are not required for the framework to function, but they are useful when you want:
-
-- role-specific workflow guidance
-- stack swapping without rewriting each agent
-- more detailed instructions for common tasks
-
-Example:
-
-- PM uses `create-brd` and `create-prd`
-- Architect uses `create-design-doc`
-- Backend dev uses `implement-backend` plus a stack override such as `backend-node-express`
-- UI dev uses `implement-frontend` plus a stack override such as `frontend-react`
-- QA uses `run-qa-checks`
-
-This lets you keep the core agent responsibilities stable while swapping technology-specific execution instructions as needed.
-
-## Start the workflow
-
-From the target project root, launch Claude Code:
-
+Non-interactive (CI, scripts) and other options:
 ```bash
-claude
+bash /path/to/agentic-sdlc/agent-setup.sh --type new --stack both
+bash /path/to/agentic-sdlc/agent-setup.sh --type existing --stack other --remove-legacy
+bash /path/to/agentic-sdlc/agent-setup.sh --help
 ```
 
-Then instruct Claude to read the generated files and act as the desired role.
+| Option | Values | Without it |
+|---|---|---|
+| `--type` | `new` (adds the `src/` and `tests/` scaffold), `existing` (adds brownfield guardrails and the onboarding agent) | Uses the type recorded by an earlier run, or asks. With no terminal and no record, it exits with an error |
+| `--stack` | `node-express`, `react`, `both`, `other` (a blank `stack-project` template for any other stack) | Asks if the project has no stack skill yet; with no terminal it installs `stack-project` |
+| `--remove-legacy` | — | Asks before removing files from the previous framework version, or lists them when there's no terminal |
 
-### New project flow
+The script **never runs git and never changes GitHub** (DEC-004). It records what it installed in `.claude/sdlc.json` (framework version, project type, stacks) and logs `framework_installed` / `framework_upgraded` in `tracking/activity.jsonl`.
 
-Use the PM agent first to generate requirements and product deliverables.
+**Then** (the script prints these steps too)
+1. **Stack commands:** fill in the real commands in `.claude/skills/stack-*/SKILL.md`. In an existing project, the onboarding agent can do this from your codebase.
+2. **Protect `main`** on GitHub (Settings → Branches) so only you can merge.
+3. **Keep the repository private** if requirement sources will contain personal or confidential information. Raw emails and chats are committed verbatim.
+4. **Commit the installed files** on a branch, then run `claude` in the project and start:
+   - **New project:** "Use the planner to capture this as a requirement source: *(paste an email, chat or notes)*"
+   - **Existing project:** "Use the onboarding agent to map this codebase." Approve the onboarding documents before starting new feature work.
+
+**Upgrading / re-running is safe**
+- Framework files (`AGENTS.md`, agents, core skills) are upgraded. A file you edited is saved as `<file>.bak-<timestamp>` first. Move anything you need into `CLAUDE.md`, then delete the `.bak` files.
+- Project files (tracking logs, registers, test records, `CLAUDE.md`, settings, stack skills) are only created when missing, so your data is never overwritten.
+- A stack skill is only added on re-run if you pass `--stack`. One you deleted or replaced doesn't come back.
+- Files from the previous framework version (`pm.md`, `architect.md`, flat `skills/*.md`, ...) are removed only with `--remove-legacy` or your "y" at the prompt. Nothing else is ever removed.
+
+## Roles
+
+| Agent | Does | Never |
+|---|---|---|
+| **planner** | Captures requirement sources, writes BRD/PRD, technical design, API contract, test plan and test cases, change requests | Writes code |
+| **developer** | Automates every test case and implements approved REQs test-first, fixes defects, updates traceability and CHANGELOG, opens PRs | Changes requirements, contracts or test cases' expected results |
+| **reviewer** | Verifies a PR independently: runs every test, records the RUN report, raises and verifies defects, writes the review report | Edits code, approves, or merges |
+| **onboarding** *(existing projects)* | Maps the existing codebase into as-built docs, REQs, test cases and a baseline test run | Changes code |
+| **you** | Approve documents, answer questions, accept CRs, merge, release | — |
+
+There is no separate QA agent: test cases are designed by the planner, automated by the developer and verified independently by the reviewer. Your own acceptance sign-off (UAT) is optional, and there is no code-coverage percentage; the gate is a passing positive and failure case for every acceptance criterion. These defaults are recorded in this repo as DEC-003, and a project can change them in its own test plan.
+
+## Lifecycle
+
+```
+0 Intake ─► 1 Requirements ─► [Gate A] ─► 2 Design + test cases ─► [Gate B] ─► 3 Build ─► 4 Verify ─► 5 Review ─► [Gate C] ─► 6 Release
+ planner      planner          you         planner                  you        developer   reviewer    reviewer     you         regression run + you
+```
+
+- **Gate A:** you approve the PRD. **Gate B:** you approve the design, contract, test plan and test cases. **Gate C:** you merge the PR.
+- Agents refuse to start a phase whose gate hasn't passed.
+- Bugs (`BUG-###`) get a defect record in `docs/04-delivery/defects/`, then go straight to a failing test, a fix and a verification run. Changes to approved work go through a change request (`CR-###`) and a new document version.
+
+## Day-to-day prompts
+
+| You want to | Say |
+|---|---|
+| Record an email or chat | "Use the planner to capture this as a requirement source: *(paste)*" |
+| Process dropped files | Put them in `requirements/inbox/`, then: "Use the planner to process the inbox." |
+| Turn sources into requirements | "Use the planner to update the PRD from the new sources." |
+| Approve a document | "PRD-v1.0 is approved. Record it." (Only you can approve. Agents never assume approval.) |
+| Answer questions | "Answers: Q-003 option 1, Q-004 use 30 days." or "Go with the defaults for the open questions." |
+| Design | "Use the planner to write the technical design for PRD-v1.0." |
+| Build | "Use the developer to implement REQ-004." |
+| Review | "Use the reviewer to review PR 12." (records the test run and any defects) |
+| Regression before release | "Run the release regression for 1.2.0 using manage-tests." |
+| See status | "Summarize docs/04-delivery/traceability.md and the open questions." |
+
+## What gets tracked, and where
+
+| What | Where | ID |
+|---|---|---|
+| Every requirement source (email, chat, doc, meeting), with sender, original date, verbatim text and attachments | `requirements/register.md`, `requirements/sources/` | `SRC-###` |
+| Requirements and acceptance criteria | `docs/02-product/PRD-vX.Y.md` | `REQ-###`, `AC-###.n` |
+| Changes to approved requirements | `requirements/changes/` | `CR-###` |
+| Current version and status of every document | `docs/index.md` | — |
+| Status of every REQ/BUG: source → spec → design → code → tests → PR | `docs/04-delivery/traceability.md` | — |
+| Questions and assumptions | `tracking/questions.md` | `Q-###` |
+| Product and scope decisions | `tracking/decisions.md` | `DEC-###` |
+| Architecture decisions | `docs/03-architecture/adr/` | `ADR-###` |
+| Per-branch plan, log and test evidence | `tracking/progress/<branch>.md` | — |
+| Timestamped event history | `tracking/activity.jsonl` | — |
+| Test plan and test cases | `docs/04-delivery/test-plan-vX.Y.md`, `docs/04-delivery/test-cases/` | `TC-###.n` |
+| Test runs, with a result per test case | `docs/04-delivery/test-runs/` | `RUN-…` |
+| Defects | `docs/04-delivery/defects/` | `BUG-###` |
+| Review reports | `docs/04-delivery/reviews/` | — |
+| User-visible changes | `CHANGELOG.md` | — |
+
+### Document versioning
+Specs carry a header (version, status, owner, dates, approver, sources) and a revision history. The status flow is `Draft` → `In Review` → `Approved` → `Superseded`. **Approved files are frozen.** A change creates `PRD-v1.1.md` (additive) or `PRD-v2.0.md` (scope change), and every revision cites the SRC, CR or Q that caused it.
+
+### Testing
+Tests are designed from the acceptance criteria before any code is written, and every result is recorded:
+
+| Step | Who | Record |
+|---|---|---|
+| Test plan and test cases. Every criterion gets a **positive** and a **failure** case (negative, boundary, error, security) | planner, approved by you at Gate B | `docs/04-delivery/test-plan-vX.Y.md`, `test-cases/TC-REQ-###.md` |
+| An automated test for every case, named `REQ-004 TC-004.2 …`. New edge cases are added, never deleted | developer | Test code + the Automated test column |
+| A verification run on every PR, with a result per test case and every failure classified | reviewer | `test-runs/RUN-…md` |
+| A defect record for every product failure: reproduction, expected vs actual, evidence, root cause, fix, verification | reviewer → developer → reviewer | `defects/BUG-###-…md` |
+| A full regression run before release | you or the main session | `test-runs/RUN-…-release-x.y.md` |
+
+### Asking questions
+Agents stop and ask when a requirement is ambiguous, sources conflict, a choice has product, security, cost or UX impact, or the work would touch approved documents. Each question goes into `tracking/questions.md` with options and a recommendation. Subagents can't prompt you directly, so they end their run with a **"Questions for the human"** list, and the main Claude session asks you. Non-blocking unknowns may proceed on an assumption marked `Assumed` for you to confirm later.
+
+## Files installed
 
 ```text
-Read AGENTS.md and .claude/agents/pm.md. Act as the PM and generate the initial requirements for [YOUR IDEA].
+AGENTS.md                      # rules for every agent (managed; brownfield guardrails added for existing projects)
+CLAUDE.md                      # imports AGENTS.md, plus your project notes (yours)
+CHANGELOG.md
+.claude/
+  sdlc.json                    # install record: framework version, project type, stacks (written by the installer)
+  settings.json                # denies gh pr merge, pushes to main/master, force-pushes (yours)
+  agents/  planner.md  developer.md  reviewer.md  [onboarding.md]
+  skills/
+    intake-requirement/        # SKILL.md + source and change-request templates
+    write-requirements/        # SKILL.md + BRD and PRD templates
+    write-design/              # SKILL.md + tech-design, OpenAPI and ADR templates
+    manage-tests/              # SKILL.md + test-plan, test-cases, test-run and defect templates
+    implement-feature/
+    review-pr/
+    stack-node-express/ | stack-react/ | stack-project/   # the stack(s) you chose (yours)
+docs/
+  index.md  [00-onboarding/]  01-business/  02-product/  03-architecture/adr/  04-delivery/{traceability.md,test-cases/,test-runs/,defects/,reviews/}
+requirements/
+  register.md  inbox/  sources/attachments/  changes/
+tracking/
+  activity.jsonl  questions.md  decisions.md  progress/_template.md
+[src/{backend,frontend}/ tests/{backend,e2e}/]   # new projects only, with .gitkeep placeholders
 ```
 
-### Existing project flow
+### Adding your stack
+Choose `--stack other` (or option 4 in the menu) to get a blank `stack-project` skill, then fill in your project's real commands and conventions (Python/FastAPI, Next.js, PHP/Laravel, ...). In an existing project, the onboarding agent fills it in from what it finds in the codebase. To add another stack later, re-run with `--stack <value>`.
 
-Start with onboarding to map the codebase before introducing new requirements.
+## Guardrails
+- Repository files are the source of truth; chat memory is not.
+- No merging and no pushing to `main` by agents. `.claude/settings.json` blocks the common commands, but deny rules match command prefixes only, so **GitHub branch protection is the real safeguard**.
+- Raw emails, chats and documents are committed verbatim as the audit trail; only credentials and payment card numbers are redacted. Keep the repository private if sources contain personal data.
+- IDs appear in every branch, commit and PR: `feat(REQ-012): ...`.
+- Every acceptance criterion has a positive and a failure test case, each automated with its TC-ID in the test name. Every PR gets a recorded test run. No skipped, deleted or weakened tests.
+- Existing projects: onboard first, make surgical changes, and add characterization tests before touching existing files.
+
+## Developing this repository
 
 ```text
-Read AGENTS.md and .claude/agents/onboarding.md. Act as the Onboarding Analyst and map this codebase without changing code.
+agent-setup.sh            # the installer
+templates/
+  AGENTS.core.md          # + AGENTS.brownfield.md → AGENTS.md
+  CLAUDE.md
+  framework/claude/       # → .claude/ (managed)
+  brownfield/             # onboarding agent + docs/00-onboarding (existing projects)
+  greenfield/             # src/ and tests/ scaffold (new projects)
+  project/                # → project root (created only if missing)
+  stacks/                 # stack-node-express, stack-react, stack-project (installed per --stack)
+  VERSION                 # framework version written to .claude/sdlc.json
+tests/setup.test.sh       # run: bash tests/setup.test.sh  (pip install pyyaml to also run TC-002.3)
 ```
 
-## Agent responsibilities and flow
+Each check in `tests/setup.test.sh` is named after a test case in `docs/04-delivery/test-cases/`. The commands and conventions for working on this repository are in `.claude/skills/stack-bash/SKILL.md`.
 
-### PM
-
-Purpose: define the business and product direction.
-
-Skills:
-
-- `create-brd`
-- `create-prd`
-
-How it works:
-
-1. Create a feature branch
-2. Create/update the progress file
-3. Generate BRD and PRD docs
-4. Assign REQ-IDs to each user story
-5. Commit and open a PR
-
-Example prompt:
-
-> "Act as the PM. Read AGENTS.md and the repo docs. Create a BRD and PRD for [FEATURE NAME], assign REQ-IDs, and open a PR."
-
-### Architect
-
-Purpose: translate requirements into architecture and contracts.
-
-Skills:
-
-- `create-design-doc`
-
-How it works:
-
-1. Read the approved PRD
-2. Create/update the architecture doc and API contract
-3. Map endpoints and data contracts to REQ-IDs
-4. Commit and open a PR
-
-Example prompt:
-
-> "Act as the Architect. Read AGENTS.md and the PRD. Update docs/03-architecture/tech_arch.md and api_contract.yaml, map each contract to a REQ-ID, and open a PR."
-
-### Backend Developer
-
-Purpose: implement backend behavior against the contract.
-
-Skills:
-
-- `implement-backend`
-- optional stack override: `backend-node-express`
-
-How it works:
-
-1. Read the API contract and requirement docs
-2. Implement the feature with minimal scope
-3. Add unit tests
-4. Run the relevant validation checks
-5. Commit with the REQ-ID and open a PR
-
-Example prompt:
-
-> "Act as the Backend Developer. Read AGENTS.md and api_contract.yaml. Implement the backend for [REQ-ID], add tests, and open a PR."
-
-### UI Developer
-
-Purpose: implement frontend features with testable UI elements.
-
-Skills:
-
-- `implement-frontend`
-- optional stack override: `frontend-react`
-
-How it works:
-
-1. Read the contract and requirement docs
-2. Implement the UI
-3. Add `data-testid` attributes to interactive elements
-4. Verify the UI using the smallest relevant checks
-5. Commit and open a PR
-
-Example prompt:
-
-> "Act as the UI Developer. Read AGENTS.md and api_contract.yaml. Implement the frontend for [REQ-ID], add `data-testid` attributes, and open a PR."
-
-### QA Engineer
-
-Purpose: validate behavior and maintain traceability.
-
-Skills:
-
-- `run-qa-checks`
-
-How it works:
-
-1. Read the requirement and implementation
-2. Run targeted tests or UI checks
-3. Update traceability docs
-4. Report gaps or blockers clearly
-5. Commit and open a PR
-
-Example prompt:
-
-> "Act as the QA Engineer. Read AGENTS.md and the requirements for [REQ-ID]. Write E2E tests, update docs/04-delivery/traceability.md, and open a PR."
-
-### Reviewer
-
-Purpose: validate PR quality without merging.
-
-How it works:
-
-1. Review the diff
-2. Check REQ-ID usage, tests, and tracking updates
-3. Leave a review with blocking comments if needed
-4. Never merge the PR
-
-Example prompt:
-
-> "Act as the Reviewer. Review PR [PR NUMBER] using AGENTS.md. Validate REQ-ID traceability, test coverage, and tracking updates, then leave a review. Do not merge."
-
-### Onboarding Analyst
-
-Purpose: map an existing codebase to the SDLC framework without changing code.
-
-How it works:
-
-1. Scan the repository
-2. Document architecture and business logic
-3. Generate onboarding docs and REQ-IDs for current features
-4. Open a documentation PR
-
-Example prompt:
-
-> "Act as the Onboarding Analyst. Read AGENTS.md and map this codebase without changing code. Generate docs/00-onboarding/architecture-map.md, As-Built-BRD.md, and As-Built-PRD.md with REQ-IDs."
-
-## Stack swapping
-
-The agent roles stay the same across projects, but the execution details can change by stack.
-
-For example:
-
-- Node/Express backend: use `backend-node-express`
-- React frontend: use `frontend-react`
-- Python/FastAPI backend: create a new `backend-python-fastapi.md` file and point the backend agent to it
-- Next.js frontend: create a new `frontend-nextjs.md` file and point the UI agent to it
-
-This keeps the SDLC process portable without rewriting the entire role model.
-
-## Guardrails built into the workflow
-
-The generated `AGENTS.md` includes the main guardrails:
-
-- use repository files instead of chat memory as the source of truth
-- never merge to `main`
-- never overwrite approved specs without creating a new version
-- include REQ-IDs in work products and commit references
-- update tracking files for in-progress work
-- validate with the smallest relevant tests or checks
-- keep brownfield changes surgical and isolated
-
-## Example project structure
-
-```text
-.
-├── AGENTS.md
-├── CHANGELOG.md
-├── .claude/
-│   ├── agents/
-│   └── skills/
-├── docs/
-│   ├── 00-onboarding/
-│   ├── 01-business/
-│   ├── 02-product/
-│   ├── 03-architecture/
-│   └── 04-delivery/
-├── tracking/
-│   ├── activity.jsonl
-│   ├── backlog/
-│   ├── progress/
-│   └── tech-debt/
-├── src/
-├── tests/
-└── ...
-```
-
-## Notes
-
-- The onboarding agent is only generated for existing projects.
-- The PM, architecture, backend, frontend, QA, and reviewer roles are generated for both project types.
-- Skills are optional, but they make the process more explicit and easier to swap by technology stack.
+Template folders are named `claude/`, not `.claude/`, so Claude Code doesn't load them as this repository's own configuration. The repository uses the framework on itself: its `.claude/`, `docs/`, `requirements/` and `tracking/` folders are an installed copy and track its own development.
 
 ## License
 

@@ -1,0 +1,48 @@
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"task_started","ref":"REQ-001","branch":"feature/REQ-001-lean-sdlc-framework","note":"lean framework restructure"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"source_captured","ref":"SRC-001","note":"chat: lean setup with full tracking"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"decision_recorded","ref":"DEC-001","note":"lean agent roster"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"doc_created","ref":"docs/02-product/PRD-v1.0.md","to":"In Review"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"doc_created","ref":"docs/00-onboarding/architecture-map-v1.0.md","to":"In Review"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"req_created","ref":"REQ-001..REQ-007","note":"PRD-v1.0"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"question_raised","ref":"Q-001","note":"Assumed: commit sources with redaction"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"question_raised","ref":"Q-002","note":"Assumed: no separate QA role"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"tests_run","ref":"tests/setup.test.sh","branch":"feature/REQ-001-lean-sdlc-framework","note":"54 passed, 0 failed"}
+{"ts":"2026-11-12T08:45:00Z","actor":"main","event":"status_changed","ref":"REQ-001..REQ-007","from":"In Progress","to":"In Review","branch":"feature/REQ-001-lean-sdlc-framework"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"source_captured","ref":"SRC-002","note":"chat: answer to Q-001"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"question_answered","ref":"Q-001","from":"Assumed","to":"Answered","note":"commit raw sources verbatim"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"decision_recorded","ref":"DEC-002","note":"raw sources committed verbatim, credentials redacted"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"doc_versioned","ref":"docs/02-product/PRD-v1.0.md","note":"In Review draft edited: AC-003.4, AC-007.6"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"req_created","ref":"BUG-001","to":"In Progress","note":"re-run re-creates deleted stack skills"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"tests_run","ref":"tests/setup.test.sh","branch":"feature/REQ-001-lean-sdlc-framework","note":"60 passed, 0 failed"}
+{"ts":"2026-11-13T02:42:57Z","actor":"main","event":"status_changed","ref":"BUG-001","from":"In Progress","to":"In Review","branch":"feature/REQ-001-lean-sdlc-framework"}
+{"ts":"2026-11-13T02:50:47Z","actor":"main","event":"source_captured","ref":"SRC-003","note":"chat: documented testing"}
+{"ts":"2026-11-13T02:50:47Z","actor":"main","event":"req_created","ref":"REQ-008","to":"In Review","note":"PRD-v1.0"}
+{"ts":"2026-11-13T02:50:47Z","actor":"main","event":"question_raised","ref":"Q-003","note":"Assumed: UAT optional"}
+{"ts":"2026-11-13T02:50:47Z","actor":"main","event":"question_raised","ref":"Q-004","note":"Assumed: no coverage percentage"}
+{"ts":"2026-11-13T02:50:47Z","actor":"main","event":"doc_created","ref":"docs/04-delivery/test-plan-v1.0.md","to":"In Review"}
+{"ts":"2026-11-13T02:50:47Z","actor":"main","event":"doc_created","ref":"docs/04-delivery/test-cases/TC-REQ-001..008.md","note":"mapped to tests/setup.test.sh"}
+{"ts":"2026-11-13T02:50:47Z","actor":"main","event":"defect_raised","ref":"BUG-001","to":"Fixed","note":"defect file back-filled; fixed in abcfbde"}
+{"ts":"2026-11-13T02:52:25Z","actor":"main","event":"test_run_recorded","ref":"RUN-20261113-0251-REQ-001-branch","branch":"feature/REQ-001-lean-sdlc-framework","note":"38 pass, 0 fail, 1 skipped; exit criteria Met; commit e82e8e5"}
+{"ts":"2026-11-13T02:52:25Z","actor":"main","event":"status_changed","ref":"BUG-001","from":"Fixed","to":"Verified","note":"TC-007.11 pass in RUN-20261113-0251-REQ-001-branch"}
+{"ts":"2026-11-13T02:58:50Z","actor":"main","event":"source_captured","ref":"SRC-004","note":"chat: approval of PRD, ARCH-MAP, TEST-PLAN"}
+{"ts":"2026-11-13T02:58:50Z","actor":"human","event":"doc_approved","ref":"docs/02-product/PRD-v1.0.md","from":"In Review","to":"Approved","note":"Gate A; recorded by main via SRC-004"}
+{"ts":"2026-11-13T02:58:50Z","actor":"human","event":"doc_approved","ref":"docs/00-onboarding/architecture-map-v1.0.md","from":"In Review","to":"Approved","note":"Gate B; recorded by main via SRC-004"}
+{"ts":"2026-11-13T02:58:50Z","actor":"human","event":"doc_approved","ref":"docs/04-delivery/test-plan-v1.0.md","from":"In Review","to":"Approved","note":"Gate B incl. TC-REQ-001..008; recorded by main via SRC-004"}
+{"ts":"2026-11-13T03:16:55Z","actor":"main","event":"source_captured","ref":"SRC-005","note":"chat: defaults for Q-002..Q-004"}
+{"ts":"2026-11-13T03:16:55Z","actor":"main","event":"question_answered","ref":"Q-002","from":"Assumed","to":"Answered","note":"no separate QA agent"}
+{"ts":"2026-11-13T03:16:55Z","actor":"main","event":"question_answered","ref":"Q-003","from":"Assumed","to":"Answered","note":"UAT optional"}
+{"ts":"2026-11-13T03:16:55Z","actor":"main","event":"question_answered","ref":"Q-004","from":"Assumed","to":"Answered","note":"no coverage percentage"}
+{"ts":"2026-11-13T03:16:55Z","actor":"main","event":"decision_recorded","ref":"DEC-003","note":"testing and roles defaults, for now"}
+{"ts":"2026-11-13T03:30:04Z","actor":"installer","event":"framework_installed","ref":".claude/sdlc.json","note":"agentic-sdlc 2.1.0, type existing, stacks stack-bash, created 0, updated 1"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"source_captured","ref":"SRC-006","note":"chat: all setup through the .sh installer"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"source_captured","ref":"SRC-007","note":"chat: REQ-009 approval and decisions"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"decision_recorded","ref":"DEC-004","note":"installer never touches git or GitHub"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"doc_versioned","ref":"docs/02-product/PRD-v1.1.md","from":"PRD-v1.0","to":"PRD-v1.1","note":"REQ-009 added"}
+{"ts":"2026-11-13T03:30:48Z","actor":"human","event":"doc_approved","ref":"docs/02-product/PRD-v1.1.md","to":"Approved","note":"approve and build now; recorded by main via SRC-007"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"doc_versioned","ref":"docs/04-delivery/test-plan-v1.1.md","from":"test-plan-v1.0","to":"test-plan-v1.1"}
+{"ts":"2026-11-13T03:30:48Z","actor":"human","event":"doc_approved","ref":"docs/04-delivery/test-plan-v1.1.md","to":"Approved","note":"with TC-REQ-009; recorded by main via SRC-007"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"req_created","ref":"REQ-009","to":"Approved","note":"PRD-v1.1"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"tests_run","ref":"tests/setup.test.sh","branch":"feature/REQ-001-lean-sdlc-framework","note":"red before code: 21 pass, 40 fail"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"tests_run","ref":"tests/setup.test.sh","branch":"feature/REQ-001-lean-sdlc-framework","note":"green: 61 pass, 0 fail, 1 skipped"}
+{"ts":"2026-11-13T03:30:48Z","actor":"main","event":"status_changed","ref":"REQ-009","from":"Approved","to":"In Review","branch":"feature/REQ-001-lean-sdlc-framework"}
+{"ts":"2026-11-13T03:31:52Z","actor":"main","event":"test_run_recorded","ref":"RUN-20261113-0331-REQ-009-branch","branch":"feature/REQ-001-lean-sdlc-framework","note":"53 pass, 0 fail, 1 skipped; exit criteria Met; commit de1ba2a"}

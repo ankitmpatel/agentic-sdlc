@@ -1,0 +1,87 @@
+# doc_id: API-CONTRACT | status: Draft | prd: PRD-v1.0 | design: tech-design-v1.0.md
+# Revision history (newest first):
+#   1.0  YYYY-MM-DD  planner (agent)  Initial draft  (PRD-v1.0)
+openapi: 3.1.0
+info:
+  title: <project> API
+  version: 1.0.0
+  description: Approved contract. Do not edit once status is Approved; create the next version instead.
+servers:
+  - url: http://localhost:3000/api
+paths:
+  /examples:
+    post:
+      operationId: createExample
+      summary: Create an example
+      x-req-ids: [REQ-001]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ExampleInput'
+      responses:
+        '201':
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Example'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+  schemas:
+    ExampleInput:
+      type: object
+      required: [name]
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 100
+    Example:
+      allOf:
+        - $ref: '#/components/schemas/ExampleInput'
+        - type: object
+          required: [id]
+          properties:
+            id:
+              type: string
+              format: uuid
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code:
+          type: string
+          example: VALIDATION_ERROR
+        message:
+          type: string
+        details:
+          type: array
+          items:
+            type: object
+            properties:
+              field: { type: string }
+              issue: { type: string }
+  responses:
+    ValidationError:
+      description: The request failed validation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid credentials
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
