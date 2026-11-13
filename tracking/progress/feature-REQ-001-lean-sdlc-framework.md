@@ -16,7 +16,7 @@
 - [x] tests/setup.test.sh
 - [x] Dogfood: install into this repo, remove legacy files, record SRC-001, PRD, traceability
 - [x] REQ-008: manage-tests skill, rules, agents, test cases for REQ-001…008, test names carry TC-IDs
-- [ ] Record RUN for this branch
+- [x] Record RUN for this branch (RUN-20261113-0251-REQ-001-branch)
 - [ ] Owner approves PRD-v1.0, ARCH-MAP v1.0 and TEST-PLAN v1.0; answers Q-002, Q-003, Q-004
 
 ## Log
@@ -27,6 +27,7 @@
 | 2026-11-13 | Q-001 answered (SRC-002): raw sources committed verbatim. Updated the intake skill, AGENTS.md and the inbox README (DEC-002). |
 | 2026-11-13 | BUG-001: the re-run re-created deleted stack skills. Fixed in agent-setup.sh (abcfbde), with TC-007.11 added. |
 | 2026-11-13 | SRC-003 / REQ-008: test management added. Test names now carry TC-IDs; checks went from 60 to 46 because related checks were merged, with TC-002.5 and TC-007.13 added. |
+| 2026-11-13 | RUN-20261113-0251-REQ-001-branch on e82e8e5: 38/39 test cases pass, 1 skipped (TC-002.3, PyYAML missing), exit criteria Met. BUG-001 Verified. |
 
 ## Test evidence
 | Date | Command | Result |

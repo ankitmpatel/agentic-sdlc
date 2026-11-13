@@ -2,7 +2,7 @@
 bug_id: BUG-001
 title: Re-running the installer re-creates deleted stack skills
 severity: Minor
-status: Fixed
+status: Verified
 reported: 2026-11-13
 reported_by: main session (Claude)
 found_in: Manual re-install of this repo (before RUN reports existed)
@@ -11,7 +11,7 @@ req: REQ-007
 commit: abcfbde^ (f200585)
 environment: macOS 12.7.6, GNU bash 3.2.57
 fixed_in: abcfbde
-verified_in:
+verified_in: RUN-20261113-0251-REQ-001-branch
 ---
 
 # BUG-001 — Re-running the installer re-creates deleted stack skills
@@ -44,10 +44,11 @@ Project files are "create if missing". A deleted file counts as missing, so the 
 `agent-setup.sh` sets `HAS_STACK_SKILL` before installing and skips `claude/skills/stack-*` templates when any `stack-*` skill already exists. Covered by TC-007.11.
 
 ## Verification
-<Pending: RUN on this branch.>
+TC-007.11 passed in RUN-20261113-0251-REQ-001-branch on commit e82e8e5 (2026-11-13). Status goes to Closed when the PR is merged.
 
 ## History
 | Date | Status | By | Note |
 |---|---|---|---|
 | 2026-11-13 | Open | main session (Claude) | Found while re-installing into this repo |
 | 2026-11-13 | Fixed | main session (Claude) | Commit abcfbde; TC-007.11 added |
+| 2026-11-13 | Verified | main session (Claude) | TC-007.11 pass in RUN-20261113-0251-REQ-001-branch |

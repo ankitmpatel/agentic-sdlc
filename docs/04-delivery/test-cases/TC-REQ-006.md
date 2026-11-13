@@ -17,6 +17,6 @@ updated: 2026-11-13
 ## Test cases
 | TC | AC | Type | Title | Preconditions / data | Steps | Expected result | Mode | Automated test | Last result |
 |---|---|---|---|---|---|---|---|---|---|
-| TC-006.1 | AC-006.1 | Positive | AGENTS.md has the ask-don't-assume protocol | New install | grep AGENTS.md | Section present | Auto | `tests/setup.test.sh › "TC-006.1 AGENTS.md has the ask-don't-assume protocol"` | Not run |
-| TC-006.2 | AC-006.2 | Positive | Every agent ends with "Questions for the human" | New install | grep each agent | Present in all | Auto | `tests/setup.test.sh › "TC-006.2 every agent ends with Questions for the human"` | Not run |
+| TC-006.1 | AC-006.1 | Positive | AGENTS.md has the ask-don't-assume protocol | New install | grep AGENTS.md | Section present | Auto | `tests/setup.test.sh › "TC-006.1 AGENTS.md has the ask-don't-assume protocol"` | Pass (RUN-20261113-0251-REQ-001-branch) |
+| TC-006.2 | AC-006.2 | Positive | Every agent ends with "Questions for the human" | New install | grep each agent | Present in all | Auto | `tests/setup.test.sh › "TC-006.2 every agent ends with Questions for the human"` | Pass (RUN-20261113-0251-REQ-001-branch) |
 | — | AC-006.1–006.2 | Negative | N/A — static rule text; agent behaviour at runtime is verified in use, not by this suite |  |  |  |  |  | — |

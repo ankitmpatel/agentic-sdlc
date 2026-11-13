@@ -22,3 +22,5 @@
 {"ts":"2026-11-13T02:50:47Z","actor":"main","event":"doc_created","ref":"docs/04-delivery/test-plan-v1.0.md","to":"In Review"}
 {"ts":"2026-11-13T02:50:47Z","actor":"main","event":"doc_created","ref":"docs/04-delivery/test-cases/TC-REQ-001..008.md","note":"mapped to tests/setup.test.sh"}
 {"ts":"2026-11-13T02:50:47Z","actor":"main","event":"defect_raised","ref":"BUG-001","to":"Fixed","note":"defect file back-filled; fixed in abcfbde"}
+{"ts":"2026-11-13T02:52:25Z","actor":"main","event":"test_run_recorded","ref":"RUN-20261113-0251-REQ-001-branch","branch":"feature/REQ-001-lean-sdlc-framework","note":"38 pass, 0 fail, 1 skipped; exit criteria Met; commit e82e8e5"}
+{"ts":"2026-11-13T02:52:25Z","actor":"main","event":"status_changed","ref":"BUG-001","from":"Fixed","to":"Verified","note":"TC-007.11 pass in RUN-20261113-0251-REQ-001-branch"}
